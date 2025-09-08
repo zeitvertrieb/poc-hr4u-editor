@@ -4,6 +4,7 @@ import Title from './Title'
 import EducationItem from './EducationItem'
 import Points from './Points'
 import ExperienceItem from './ExperienceItem'
+import ProjectExperienceList from './ProjectExperienceList'
 
 export default function Content() {
     return(
@@ -53,7 +54,8 @@ export default function Content() {
             </div>
 
              <Title title="Projekterfahrung"/>
-
+            <ProjectExperienceList/>
+            
              <Title title="Skills"/>
 
              <Title title="Hobbies/Freizeit"/>
