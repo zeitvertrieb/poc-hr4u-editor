@@ -5,6 +5,8 @@ import EducationItem from './EducationItem'
 import Points from './Points'
 import ExperienceItem from './ExperienceItem'
 import ProjectExperienceList from './ProjectExperienceList'
+import StarRatingGlossary from './StarRatingGlossary'
+import SkillCategory from './SkillCategory'
 
 export default function Content() {
     return(
@@ -55,8 +57,10 @@ export default function Content() {
 
              <Title title="Projekterfahrung"/>
             <ProjectExperienceList/>
-            
+
              <Title title="Skills"/>
+             <StarRatingGlossary/>
+             <SkillCategory category="IT-Skills" subcategories=""/>
 
              <Title title="Hobbies/Freizeit"/>
               <Points/>
