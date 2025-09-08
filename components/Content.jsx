@@ -3,6 +3,7 @@ import Profile from './Profile'
 import Title from './Title'
 import EducationItem from './EducationItem'
 import Points from './Points'
+import ExperienceItem from './ExperienceItem'
 
 export default function Content() {
     return(
@@ -40,12 +41,23 @@ export default function Content() {
             </ul>
 
              <Title title="Kernqualifikationen"/>
+             <div className='flex flex-col gap-4 lg:gap-8'>
+                <ExperienceItem/>
+                <ExperienceItem/>
+            </div>
+
+             <Title title="Branchenerfahrung"/>
+             <div className='flex flex-col gap-4 lg:gap-8'>
+                <ExperienceItem/>
+                <ExperienceItem/>
+            </div>
 
              <Title title="Projekterfahrung"/>
 
              <Title title="Skills"/>
 
              <Title title="Hobbies/Freizeit"/>
+              <Points/>
         </div>
     )
 }
