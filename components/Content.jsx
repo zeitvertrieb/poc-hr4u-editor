@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Profile from './Profile'
 import Title from './Title'
+import EducationItem from './EducationItem'
+import Points from './Points'
 
 export default function Content() {
     return(
@@ -16,10 +18,34 @@ export default function Content() {
                     />
                 </div>
 
-                <h1 className="text-gray-500 font-source-sans font-extrabold text-2xl md:text-3xl lg:text-4xl border-b" >Karin SCHWAB</h1>
+                <h1 className="text-gray-500 font-source-sans font-extrabold text-2xl md:text-3xl lg:text-4xl border-b" >Karin <span className="uppercase">Schwab</span></h1>
              </div>
+
              <Profile/>
-             <Title title="Abschnitt"/>
+
+             <Title title="Ausbildung"/>
+            <div className='flex flex-col gap-4 lg:gap-8'>
+                <EducationItem/>
+                <EducationItem/>
+            </div>
+
+             <Title title="Zertifizierungen"/>
+            <Points/>
+            
+             <Title title="Fachliche Schwerpunkte"/>
+            <ul className='grid grid-cols- md:grid-cols-2 gap-4 list-disc list-inside'>
+                <li>Durchführung von Benutzerforschung und -analysen, um die Bedürfnisse und Verhaltensweisen der Nutzer:innen zu verstehen</li>
+                <li>Durchführung von Benutzerforschung und -analysen, um die Bedürfnisse und Verhaltensweisen der Nutzer:innen zu verstehen</li>
+                <li>Durchführung von Benutzerforschung und -analysen, um die Bedürfnisse und Verhaltensweisen der Nutzer:innen zu verstehen</li>
+            </ul>
+
+             <Title title="Kernqualifikationen"/>
+
+             <Title title="Projekterfahrung"/>
+
+             <Title title="Skills"/>
+
+             <Title title="Hobbies/Freizeit"/>
         </div>
     )
 }
