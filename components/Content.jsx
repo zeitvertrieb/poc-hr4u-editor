@@ -61,10 +61,12 @@ export default async function Content({data}) {
 
              <Title title="Skills"/>
              <StarRatingGlossary/>
-             <SkillCategory category="IT-Skills" subcategories=""/>
+             {data.skills.map((skill_category, index) => {
+               return <SkillCategory key={index} data={skill_category}/>
+             })}
 
              <Title title="Hobbies/Freizeit"/>
-              <Points/>
+              <Points data={data.hobbies}/>
         </div>
     )
 }

@@ -66,8 +66,8 @@
                     "name":"Analyse-Methoden",
                     "ratings":[
                         {
-                            "5":["Fehler-/Ursachenanalyse", "Stekeholder-Analyse"],
-                            "4":["Andere Methoden"]
+                            "five":["Fehler-/Ursachenanalyse", "Stekeholder-Analyse"],
+                            "four":["Andere Methoden"]
                         }
                     ]
                 },
@@ -75,7 +75,7 @@
                     "name":"Design-Methoden",
                     "ratings":[
                         {
-                            "3":["Objektorientiertes Design"]
+                            "three":["Objektorientiertes Design"]
                         }
                     ]
                 }
@@ -88,8 +88,8 @@
                     "name":"Entwicklungsprozess",
                     "ratings":[
                         {
-                            "5":["Wasserfall-Modell"],
-                            "3":["SCRUM"]
+                            "five":["Wasserfall-Modell"],
+                            "three":["SCRUM"]
                         }
                     ]
                 }
