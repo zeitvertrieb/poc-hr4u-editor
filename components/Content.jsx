@@ -8,7 +8,7 @@ import ProjectExperienceList from './ProjectExperienceList'
 import StarRatingGlossary from './StarRatingGlossary'
 import SkillCategory from './SkillCategory'
 
-export default function Content() {
+export default async function Content({data}) {
     return(
         <div className="flex flex-col w-full lg:w-[80vw] xl:w-1/2 min-h-screen bg-surface-rise lg:my-4 xl:my-8 2xl:my-16 py-4 px-8 md:py-8 md:px-12 gap-6 lg:gap-10">
              <div className="flex flex-col">
