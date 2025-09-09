@@ -1,9 +1,9 @@
-export default function EducationItem() {
+export default function EducationItem({data}) {
     return(
-        <div className="flex flex-col md:flex-row md:justify-between">
-            <p>Sep. 2020 - Juni 2024</p>
-            <p>Master</p>
-            <p>FH St. Pölten</p>
+        <div className="flex flex-col md:grid md:grid-cols-3">
+            <p>{data.start} - {data.end}</p>
+            <p className="md:text-center">{data.degree}</p>
+            <p className="md:text-right">{data.institution}</p>
         </div>
     )
 }

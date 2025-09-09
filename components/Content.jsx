@@ -7,6 +7,7 @@ import ExperienceItem from './ExperienceItem'
 import ProjectExperienceList from './ProjectExperienceList'
 import StarRatingGlossary from './StarRatingGlossary'
 import SkillCategory from './SkillCategory'
+import { log } from 'console'
 
 export default async function Content({data}) {
     return(
@@ -22,26 +23,25 @@ export default async function Content({data}) {
                     />
                 </div>
 
-                <h1 className="text-gray-500 font-source-sans font-extrabold text-2xl md:text-3xl lg:text-4xl border-b" >Karin <span className="uppercase">Schwab</span></h1>
+                <h1 className="text-gray-500 font-source-sans font-extrabold text-2xl md:text-3xl lg:text-4xl border-b" >{data.first_name} <span className="uppercase">{data.last_name}</span></h1>
              </div>
 
-             <Profile/>
+             <Profile data={data}/>
 
              <Title title="Ausbildung"/>
             <div className='flex flex-col gap-4 lg:gap-8'>
-                <EducationItem/>
-                <EducationItem/>
+                {data.education.map ((educationEntry, index) => {
+                        return(
+                                <EducationItem key={index} data={educationEntry}/>
+                            )
+                })}
             </div>
 
              <Title title="Zertifizierungen"/>
-            <Points/>
+            <Points data={data.certifications}/>
             
              <Title title="Fachliche Schwerpunkte"/>
-            <ul className='grid grid-cols- md:grid-cols-2 gap-4 list-disc list-inside'>
-                <li>Durchführung von Benutzerforschung und -analysen, um die Bedürfnisse und Verhaltensweisen der Nutzer:innen zu verstehen</li>
-                <li>Durchführung von Benutzerforschung und -analysen, um die Bedürfnisse und Verhaltensweisen der Nutzer:innen zu verstehen</li>
-                <li>Durchführung von Benutzerforschung und -analysen, um die Bedürfnisse und Verhaltensweisen der Nutzer:innen zu verstehen</li>
-            </ul>
+            <Points data={data.professional_focus}/>
 
              <Title title="Kernqualifikationen"/>
              <div className='flex flex-col gap-4 lg:gap-8'>
