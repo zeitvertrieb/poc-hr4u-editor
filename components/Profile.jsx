@@ -5,8 +5,8 @@ export default function Profile() {
         <div className="bg-gray-200 py-2 px-4 lg:py-4 lg:px-6 flex flex-col gap-4">
             <h2 className="font-bold text-lg md:text-xl lg:text-2xl mb-2">UX Designerin</h2>
             <div className='flex flex-col-reverse lg:grid lg:grid-cols-3 gap-2 justify-items-center'>
-                <div className='md:w-1/2 lg:w-full grid grid-cols-2 col-span-2 text-s md:text-md lg:text-lg'>
-                    <p className='font-bold text-lg'>Geburtsjahr</p>
+                <div className='md:w-1/2 lg:w-full grid grid-cols-2 gap-x-8 col-span-2 text-xs sm:text-s md:text-lg lg:text-lg'>
+                    <p className='font-bold'>Geburtsjahr</p>
                     <div>
                         <p>1998</p>
                     </div>

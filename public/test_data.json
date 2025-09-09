@@ -1,0 +1,89 @@
+{
+    "first_name": "Karin",
+    "last_name": "Schwab",
+    "role": "UX Designerin",
+    "birthyear": "1998",
+    "nationality": "Österreich",
+    "languages": [
+        {"language":"Deutsch", "proficiency":"Muttersprache"},
+        {"language":"Englisch", "proficiency":"Fließend"}
+    ],
+    "education": [
+        {"start": "Sep. 2023", "end": "Juni 2025", "degree": "Master", "institution":"FH St. Pölten"},
+        {"start": "Juni 2024", "end": "Mai 2025", "degree": "Weiterbildung im Bereich Design (Zeugnis /Bestätigung ist nicht vorhanden) ", "institution":"AK Wien"}
+    ],
+    "certifications": ["IREB CPRE Foundation Level", "CS50 Harvard Certificate", "Noch ein Zertifikat"],
+    "professional_focus": [
+        "Durchführung von Benutzerforschung und -analysen, um die Bedürfnisse und Verhaltensweisen der Nutzer:innen zu verstehen",
+        "Enge Zusammenarbeit mit Entwicklern, um sicherzustellen, dass die Designs korrekt umgesetzt werden ",
+        "Sammlung und Analyse von Benutzerfeedback, um kontinuierliche Verbesserungen an den Produkten vorzunehmen "
+    ],
+    "core_qualifications": [
+        {"name": "User Experience (UX), Usability Design", "points": "1.100", "years": "5", "level": "Ausgezeichnet"},
+        {"name": "Grafikdesign", "points": "", "years": "2", "level": "Sehr Gut"}
+    ],
+    "industry_experience": [
+        {"industy": "Einzelhandel, Grosshandel", "years":"4", "months":"10"},
+        {"industry":"IT, Software, Internet", "years":"", "months":"8"}
+    ],
+    "projects":[
+        {
+            "start":"Jän. 2020",
+            "end":"Dec. 2021",
+            "firm":"EBCONT",
+            "role":"Grafikdesignerin",
+            "name":"TechTech",
+            "description":"In diesem Projekt habe ich viele interessante Sachen gemacht, zum Beispiel Dinge und Verschiedenes. Ich war essential für dieses Team, weil ich gut darin war die Aufgaben zu erledigen Da habe ich auch herausgefunden, dass meine Lösungen die besten waren, laut Rückmeldung der Usertester:innen",
+            "team_size":"2",
+            "tasks": ["Layouterstellung für verschiedene Print Produkte", "Qualitätskontrolle & Optimierung bestehender Produkte","Erstellen von POS-Werbemitteln wie Plakate, Schilder und Sonderwerbeformen inkl. Reinzeichnung und Druckdatenaufbereitung. "],
+            "technologies": [
+                {
+                    "programms": [
+                        "Adobe Creative Suite: InDesign, Photoshop, Illustrator",
+                        "Cumulus Bilddatenbank",
+                        "Workflow (Druckaufbereitung"
+                    ]
+                }
+            ]
+        }
+    ],
+    "skills":[
+        {
+            "category":"IT Skills",
+            "subcategories":[
+                {
+                    "name":"Analyse-Methoden",
+                    "ratings":[
+                        {
+                            "5":["Fehler-/Ursachenanalyse", "Stekeholder-Analyse"],
+                            "4":["Andere Methoden"]
+                        }
+                    ]
+                },
+                {
+                    "name":"Design-Methoden",
+                    "ratings":[
+                        {
+                            "3":["Objektorientiertes Design"]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "category":"Social Skills und Methoden",
+            "subcategories":[
+                {
+                    "name":"Entwicklungsprozess",
+                    "ratings":[
+                        {
+                            "5":["Wasserfall-Modell"],
+                            "3":["SCRUM"]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "hobbies":["Podcasts", "Autorin von Kurzgeschichten", "Kochen"]
+}
