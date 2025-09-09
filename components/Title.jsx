@@ -1,5 +1,5 @@
 export default function Title({title}) {
     return(
-        <h2 className="font-source-sans font-extrabold text-xl md:text-2xl lg:text-3xl border-b uppercase" >{title}</h2>
+        <h3 className="font-source-sans font-extrabold text-xl md:text-2xl lg:text-3xl border-b uppercase" >{title}</h3>
     )
 }

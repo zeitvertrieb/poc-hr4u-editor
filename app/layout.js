@@ -21,7 +21,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="de">
       <body
         className={`${sourceSans.variable} ${zillaSlab.variable} antialiased flex flex-col`}
       >

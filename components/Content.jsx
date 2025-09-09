@@ -10,63 +10,79 @@ import SkillCategory from './SkillCategory'
 
 export default async function Content({data}) {
     return(
-        <div className="flex flex-col w-full lg:w-[80vw] xl:w-1/2 min-h-screen bg-surface-rise lg:my-4 xl:my-8 2xl:my-16 py-4 px-8 md:py-8 md:px-12 gap-6 lg:gap-10">
+        <main className="flex flex-col w-full lg:w-[80vw] xl:w-1/2 min-h-screen bg-surface-rise lg:my-4 xl:my-8 2xl:my-16 py-4 px-8 md:py-8 md:px-12 gap-6 lg:gap-10">
              <div className="flex flex-col">
-                <div className="w-[10vw] min-w-[150px] self-end"> 
+                <figure className="w-[10vw] min-w-[150px] self-end"> 
                     <Image
                         src="/images/LogoBlack.svg"
-                        alt="Logo"
+                        alt="ebcont"
                         width={125}
                         height={125}
                         layout="responsive"
                     />
-                </div>
+                </figure>
 
-                <h1 className="text-gray-500 font-source-sans font-extrabold text-2xl md:text-3xl lg:text-4xl border-b" >{data.first_name} <span className="uppercase">{data.last_name}</span></h1>
+                <h2 className="text-gray-500 font-source-sans font-extrabold text-2xl md:text-3xl lg:text-4xl border-b" >{data.first_name} <span className="uppercase">{data.last_name}</span></h2>
              </div>
 
              <Profile data={data}/>
 
-             <Title title="Ausbildung"/>
-            <div className='flex flex-col gap-4 lg:gap-8'>
-                {data.education.map ((educationEntry, index) => {
-                        return(
-                                <EducationItem key={index} data={educationEntry}/>
-                            )
-                })}
-            </div>
-
-             <Title title="Zertifizierungen"/>
-            <Points data={data.certifications}/>
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Ausbildung"/>
+                <ul className='flex flex-col gap-4 lg:gap-8'>
+                    {data.education.map ((educationEntry, index) => {
+                            return(
+                                    <EducationItem key={index} data={educationEntry}/>
+                                )
+                    })}
+                </ul>
+            </section>
+             
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Zertifizierungen"/>
+                <Points data={data.certifications}/>
+            </section>
             
-             <Title title="Fachliche Schwerpunkte"/>
-            <Points data={data.professional_focus}/>
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Fachliche Schwerpunkte"/>
+                <Points data={data.professional_focus}/>
+            </section>
 
-             <Title title="Kernqualifikationen"/>
-             <div className='flex flex-col gap-4 lg:gap-8'>
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Kernqualifikationen"/>
+                <ul className='flex flex-col gap-4 lg:gap-8'>
                 {data.core_qualifications.map((qualification, index) => {
                     return <ExperienceItem key={index} data={qualification}/>
                 })}
-            </div>
-
-             <Title title="Branchenerfahrung"/>
-             <div className='flex flex-col gap-4 lg:gap-8'>
-                {data.industry_experience.map((experience, index) => {
-                    return <ExperienceItem key={index} data={experience}/>
+                </ul>
+            </section>
+             
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Branchenerfahrung"/>
+                <ul className='flex flex-col gap-4 lg:gap-8'>
+                    {data.industry_experience.map((experience, index) => {
+                        return <ExperienceItem key={index} data={experience}/>
+                    })}
+                </ul> 
+            </section>
+             
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Projekterfahrung"/>
+                <ProjectExperienceList data={data.projects}/>
+            </section>
+             
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Skills"/>
+                <StarRatingGlossary/>
+                {data.skills.map((skill_category, index) => {
+                return <SkillCategory key={index} data={skill_category}/>
                 })}
-            </div>
-
-             <Title title="Projekterfahrung"/>
-            <ProjectExperienceList data={data.projects}/>
-
-             <Title title="Skills"/>
-             <StarRatingGlossary/>
-             {data.skills.map((skill_category, index) => {
-               return <SkillCategory key={index} data={skill_category}/>
-             })}
-
-             <Title title="Hobbies/Freizeit"/>
-              <Points data={data.hobbies}/>
-        </div>
+            </section>
+             
+            <section className='flex flex-col gap-6 lg:gap-10'>
+                <Title title="Hobbies/Freizeit"/>
+                <Points data={data.hobbies}/>
+            </section>  
+        </main>
     )
 }

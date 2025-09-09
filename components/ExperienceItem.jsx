@@ -1,9 +1,9 @@
 export default function ExperienceItem({data}) {
     return(
-        <div className="flex flex-col md:flex-row md:justify-between">
+        <li className="flex flex-col md:flex-row md:justify-between">
             <div>
-                <p>{data.name}</p>
-               {data.points && <p>({data.points} Projecterfahrung)</p>}
+                <h3>{data.name}</h3>
+                {data.points && <p>({data.points} Projecterfahrung)</p>}
             </div>
             <p>
                 {data.years && <span>{data.years} Jahre</span>}
@@ -11,6 +11,6 @@ export default function ExperienceItem({data}) {
                 {data.months && <span>{data.months} Monate</span>}
                 {data.level && <span>{data.level}</span>}
             </p>
-        </div>
+        </li>
     )
 }

@@ -11,18 +11,20 @@ const ratingMap = {
 export default function SkillSubcategory({ data }) {
     return (
         <div>
-            <h4>{data.name}</h4>
-            {data.ratings.map((rating, index) => {
-                return Object.keys(rating).map(ratingKey => {
-                    const numericRating = ratingMap[ratingKey];
-                    const skills = rating[ratingKey];
+            <h5>{data.name}</h5>
+            <ul>
+                {data.ratings.map((rating, index) => {
+                    return Object.keys(rating).map(ratingKey => {
+                        const numericRating = ratingMap[ratingKey];
+                        const skills = rating[ratingKey];
 
-                    if (numericRating) {
-                        return <StarRatingItem key={index} rating={numericRating} skills={skills} />;
-                    }
-                    return null;
-                });
-            })}
+                        if (numericRating) {
+                            return <StarRatingItem key={index} rating={numericRating} skills={skills} />;
+                        }
+                        return null;
+                    });
+                })}
+            </ul>
         </div>
     );
 }

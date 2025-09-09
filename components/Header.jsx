@@ -7,13 +7,13 @@ export default function Header() {
                 <div className="w-[8vw] min-w-[125px]"> 
                                     <Image
                                         src="/images/LogoBlack.svg"
-                                        alt="Logo"
+                                        alt="ebcont"
                                         width={125}
                                         height={125}
                                         layout="responsive"
                                     />
                                 </div>
-                 <p className='hidden md:block md:text-2xl lg:text-3xl px-4 font-zilla-slab text-primary'>HR4U-Editor</p>
+                 <h1 className='hidden md:block md:text-2xl lg:text-3xl px-4 font-zilla-slab text-primary'>HR4U-Editor</h1>
             </div>
         </header>
     )
