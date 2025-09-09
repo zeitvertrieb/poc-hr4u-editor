@@ -23,8 +23,8 @@
         {"name": "Grafikdesign", "points": "", "years": "2", "level": "Sehr Gut"}
     ],
     "industry_experience": [
-        {"industy": "Einzelhandel, Grosshandel", "years":"4", "months":"10"},
-        {"industry":"IT, Software, Internet", "years":"", "months":"8"}
+        {"name": "Einzelhandel, Grosshandel", "years":"4", "months":"10"},
+        {"name":"IT, Software, Internet", "years":"", "months":"8"}
     ],
     "projects":[
         {
@@ -37,13 +37,24 @@
             "team_size":"2",
             "tasks": ["Layouterstellung für verschiedene Print Produkte", "Qualitätskontrolle & Optimierung bestehender Produkte","Erstellen von POS-Werbemitteln wie Plakate, Schilder und Sonderwerbeformen inkl. Reinzeichnung und Druckdatenaufbereitung. "],
             "technologies": [
-                {
-                    "programms": [
-                        "Adobe Creative Suite: InDesign, Photoshop, Illustrator",
+                 "Adobe Creative Suite: InDesign, Photoshop, Illustrator",
                         "Cumulus Bilddatenbank",
                         "Workflow (Druckaufbereitung"
-                    ]
-                }
+            ]
+        },
+         {
+            "start":"Jän. 2020",
+            "end":"Dec. 2021",
+            "firm":"EBCONT",
+            "role":"Grafikdesignerin",
+            "name":"TechTech",
+            "description":"In diesem Projekt habe ich viele interessante Sachen gemacht, zum Beispiel Dinge und Verschiedenes. Ich war essential für dieses Team, weil ich gut darin war die Aufgaben zu erledigen Da habe ich auch herausgefunden, dass meine Lösungen die besten waren, laut Rückmeldung der Usertester:innen",
+            "team_size":"2",
+            "tasks": ["Layouterstellung für verschiedene Print Produkte", "Qualitätskontrolle & Optimierung bestehender Produkte","Erstellen von POS-Werbemitteln wie Plakate, Schilder und Sonderwerbeformen inkl. Reinzeichnung und Druckdatenaufbereitung. "],
+            "technologies": [
+                 "Adobe Creative Suite: InDesign, Photoshop, Illustrator",
+                        "Cumulus Bilddatenbank",
+                        "Workflow (Druckaufbereitung"
             ]
         }
     ],

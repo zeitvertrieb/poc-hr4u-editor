@@ -7,7 +7,6 @@ import ExperienceItem from './ExperienceItem'
 import ProjectExperienceList from './ProjectExperienceList'
 import StarRatingGlossary from './StarRatingGlossary'
 import SkillCategory from './SkillCategory'
-import { log } from 'console'
 
 export default async function Content({data}) {
     return(
@@ -45,18 +44,20 @@ export default async function Content({data}) {
 
              <Title title="Kernqualifikationen"/>
              <div className='flex flex-col gap-4 lg:gap-8'>
-                <ExperienceItem/>
-                <ExperienceItem/>
+                {data.core_qualifications.map((qualification, index) => {
+                    return <ExperienceItem key={index} data={qualification}/>
+                })}
             </div>
 
              <Title title="Branchenerfahrung"/>
              <div className='flex flex-col gap-4 lg:gap-8'>
-                <ExperienceItem/>
-                <ExperienceItem/>
+                {data.industry_experience.map((experience, index) => {
+                    return <ExperienceItem key={index} data={experience}/>
+                })}
             </div>
 
              <Title title="Projekterfahrung"/>
-            <ProjectExperienceList/>
+            <ProjectExperienceList data={data.projects}/>
 
              <Title title="Skills"/>
              <StarRatingGlossary/>
