@@ -25,7 +25,6 @@ export default function RootLayout({ children }) {
       <body
         className={`${sourceSans.variable} ${zillaSlab.variable} antialiased flex flex-col`}
       >
-        <Header/>
         {children}
       </body>
     </html>

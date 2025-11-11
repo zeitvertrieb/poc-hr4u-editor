@@ -8,9 +8,10 @@ import ProjectExperienceList from './ProjectExperienceList'
 import StarRatingGlossary from './StarRatingGlossary'
 import SkillCategory from './SkillCategory'
 
-export default async function Content({data}) {
+
+export default function PreviewDoc({data}) {
     return(
-        <main className="flex flex-col w-full lg:w-[80vw] xl:w-1/2 min-h-screen bg-surface-rise lg:my-4 xl:my-8 2xl:my-16 py-4 px-8 md:py-8 md:px-12 gap-6 lg:gap-10">
+        <div className="align-center flex flex-col w-full lg:w-[80vw] xl:w-3/4 min-h-screen bg-surface-rise lg:my-4 xl:my-8 2xl:my-16 py-4 px-8 md:py-8 md:px-12 gap-6 lg:gap-10">
              <div className="flex flex-col">
                 <figure className="w-[10vw] min-w-[150px] self-end"> 
                     <Image
@@ -83,6 +84,6 @@ export default async function Content({data}) {
                 <Title title="Hobbies/Freizeit"/>
                 <Points data={data.hobbies}/>
             </section>  
-        </main>
+        </div>
     )
 }
