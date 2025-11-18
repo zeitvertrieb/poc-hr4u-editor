@@ -1,22 +1,38 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/forms";
+
 @theme {
   --color-logo: #000000;
   --color-logo-on-color: #FFFFFF;
-  --text-primary: #3D255A;
-  --text-secondary: #7F6F92;
+
+  --color-primary: #3D255A;
+  --color-secondary: #7F6F92;
+  --color-text-on-interactive: #FFFFFF;
+  --color-text-disabled: #D8D3DE;
 
   --color-surface: #EEEEF6;
   --color-surface-rise: #FFFFFF;
   --color-surface-violet: #58508D;
   --color-surface-high-contrast-darker: #28183B;
 
+  --color-interactive: #6327EB;
+  --color-interactive-active: #6327EB0D;
+  --color-interactive-hover: #3D255A;
+  --color-interactive-critical: #C6211E;
+  --color-interactive-critical-hover: #771412;
+
+
   --color-border: #D8D3DE;
+  --color-border-active: #6327EB;
+
+  --color-state-active: #6327EB26;
+  --color-state-hover: #6327EB1A;
 }
 
 :root {
   --background: var(--color-surface);
-  --foreground: var(--color-logo);
+  --foreground: var(--color-primary);
 }
 
 @theme inline {
@@ -28,6 +44,6 @@
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: #3D255A;
   font-family: Arial, Helvetica, sans-serif;
 }

@@ -1,13 +1,44 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'; 
+import { STORAGE_KEY } from '@/lib/constants';
 
 export default function FileUpload() {
-  const [isDragging, setIsDragging] = useState(false);
-  // ... (rest of your state and handlers) ...
+ const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const router = useRouter(); 
+
+  const processFile = (file) => {
+    if (file && file.type === "application/json") {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        try {
+          const text = e.target.result;
+          localStorage.setItem(STORAGE_KEY, text);
+          console.log("JSON data saved to localStorage.");
+
+          router.push('/content?section=education');
+
+        } catch (err) {
+          console.error("Error reading or saving file:", err);
+          alert("Fehler beim Lesen der JSON-Datei.");
+        }
+      };
+
+      reader.onerror = (e) => {
+        console.error("FileReader error:", e);
+        alert("Datei konnte nicht gelesen werden.");
+      };
+
+      reader.readAsText(file);
+    } else {
+      alert("Bitte laden Sie eine gültige .json-Datei hoch.");
+    }
+  };
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -24,14 +55,14 @@ export default function FileUpload() {
     e.stopPropagation();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      console.log("File dropped:", e.dataTransfer.files[0]);
+      processFile(e.dataTransfer.files[0]);
     }
   };
 
   const handleChange = (e) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      console.log("File selected:", e.target.files[0]);
+      processFile(e.target.files[0]);
     }
   };
 
@@ -40,10 +71,8 @@ export default function FileUpload() {
   };
 
   return (
-    /* FIX 5: Removed the invalid "justify-center" and "align-center" classes.
-    */
     <div>
-      <label htmlFor="file-upload" className="block text-sm font-medium text-gray-900 mb-1">
+      <label htmlFor="file-upload" className="block text-sm font-medium mb-1">
         Profil hochladen *
       </label>
       <div
@@ -52,16 +81,16 @@ export default function FileUpload() {
         onDragLeave={handleDrag}
         onDrop={handleDrop}
         className={`flex flex-col items-center justify-center w-full p-12 border-2 border-dashed rounded-lg cursor-pointer transition-colors
-          ${isDragging ? 'border-primary bg-primary/10' : 'border-gray-400 bg-white hover:bg-gray-50'}
+          ${isDragging ? 'border-interactive bg-interactive-active' : 'border-interactive bg-interactive-active'}
         `}
         onClick={onButtonClick} 
       >
-        <FontAwesomeIcon icon={faCloudUploadAlt} className="text-gray-500 mb-4" size="3x" />
+        <FontAwesomeIcon icon={faCloudUploadAlt} className="mb-4" size="xl" />
         
-        <p className="text-gray-600 font-medium">Datei hier ablegen</p>
-        <p className="text-gray-500 my-2">oder</p>
+        <p className="font-medium">Datei hier ablegen</p>
+        <p className="my-2">oder</p>
         
-        <span className="bg-primary text-white font-bold py-2 px-6 rounded transition-colors">
+        <span className="bg-interactive text-text-on-interactive font-bold py-2 px-6 transition-colors hover:bg-interactive-hover">
           DATEI AUSWÄHLEN
         </span>
         
@@ -71,10 +100,10 @@ export default function FileUpload() {
           type="file"
           className="hidden"
           onChange={handleChange}
-          accept=".docx"
+          accept=".json"
         />
       </div>
-      <p className="text-xs text-gray-500 mt-2">Akzeptiertes Format: .docx</p>
+      <p className="text-xs mt-2">Akzeptiertes Format: .json</p>
     </div>
   );
 }
