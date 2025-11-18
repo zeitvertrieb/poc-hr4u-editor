@@ -29,6 +29,7 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
   const [newEntryIndex, setNewEntryIndex] = useState(null);
   const selectAllCheckboxRef = useRef(null);
   const listContainerRef = useRef(null);
+  const editInputRef = useRef(null);
 
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
@@ -39,6 +40,12 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
       }
     }
   }, [selectedIndices, data.length]);
+
+  useEffect(() => {
+    if (editIndex !== null && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [editIndex]);
 
   const handleSelectAll = () => {
     if (selectedIndices.length > 0) {
@@ -71,15 +78,10 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
   };
 
   const handleAddNew = () => {
-    const newData = [newEntryDefault, ...data];
+    const newData = [...data, newEntryDefault];
     onChange(newData);
-    setEditIndex(0);
-    setNewEntryIndex(0);
-    // Shift all existing selections down by one
-    setSelectedIndices(prev => prev.map(i => i + 1));
-    if (listContainerRef.current) {
-      listContainerRef.current.scrollTop = 0;
-    }
+    setEditIndex(data.length);
+    setNewEntryIndex(data.length);
   };
 
   const handleEntryChange = (index, value) => {
@@ -206,6 +208,7 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
                 <div className="flex-1">
                   {isThisRowEditing ? (
                     <textarea
+                      ref={editInputRef}
                       value={focus}
                       onChange={(e) => handleTextareaChange(e, index)}
                       className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"

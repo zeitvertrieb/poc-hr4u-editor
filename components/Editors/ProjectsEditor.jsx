@@ -50,6 +50,7 @@ export default function ProjectsEditor({ data, onChange }) {
     const [newEntryIndex, setNewEntryIndex] = useState(null);
     const selectAllCheckboxRef = useRef(null);
     const listContainerRef = useRef(null);
+    const editInputRef = useRef(null);
 
     useEffect(() => {
         if (selectAllCheckboxRef.current) {
@@ -60,6 +61,12 @@ export default function ProjectsEditor({ data, onChange }) {
             }
         }
     }, [selectedIndices, data.length]);
+
+    useEffect(() => {
+        if (editIndex !== null && editInputRef.current) {
+            editInputRef.current.focus();
+        }
+    }, [editIndex]);
 
     const handleSelectAll = () => {
         if (selectedIndices.length > 0) {
@@ -92,15 +99,10 @@ export default function ProjectsEditor({ data, onChange }) {
     };
 
     const handleAddNew = () => {
-        const newData = [newEntryDefaults, ...data];
+        const newData = [...data, newEntryDefaults];
         onChange(newData);
-        setEditIndex(0);
-        setNewEntryIndex(0);
-        // Shift all existing selections down by one
-        setSelectedIndices(prev => prev.map(i => i + 1));
-        if (listContainerRef.current) {
-            listContainerRef.current.scrollTop = 0;
-        }
+        setEditIndex(data.length);
+        setNewEntryIndex(data.length);
     };
 
     const handleEntryChange = (index, field, value) => {
@@ -221,7 +223,7 @@ export default function ProjectsEditor({ data, onChange }) {
                                                 <div className="flex flex-col gap-2">
                                                     <div>
                                                         <Label>Von</Label>
-                                                        <input type="text" value={entry.start} onChange={(e) => handleEntryChange(index, 'start', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Jan. 2023" />
+                                                        <input ref={editInputRef} type="text" value={entry.start} onChange={(e) => handleEntryChange(index, 'start', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Jan. 2023" />
                                                     </div>
                                                     <div>
                                                         <Label>Bis</Label>

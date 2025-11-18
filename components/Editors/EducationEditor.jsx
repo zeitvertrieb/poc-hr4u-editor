@@ -42,6 +42,7 @@ export default function EducationEditor({ data, onChange }) {
   const [newEntryIndex, setNewEntryIndex] = useState(null);
   const selectAllCheckboxRef = useRef(null);
   const listContainerRef = useRef(null);
+  const editInputRef = useRef(null);
 
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
@@ -52,6 +53,12 @@ export default function EducationEditor({ data, onChange }) {
       }
     }
   }, [selectedIndices, data.length]);
+
+  useEffect(() => {
+    if (editIndex !== null && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [editIndex]);
 
   const handleSelectAll = () => {
     if (selectedIndices.length > 0) {
@@ -84,15 +91,10 @@ export default function EducationEditor({ data, onChange }) {
   };
 
   const handleAddNew = () => {
-    const newData = [newEntryDefaults, ...data];
+    const newData = [...data, newEntryDefaults];
     onChange(newData);
-    setEditIndex(0);
-    setNewEntryIndex(0);
-    // Shift all existing selections down by one
-    setSelectedIndices(prev => prev.map(i => i + 1));
-    if (listContainerRef.current) {
-      listContainerRef.current.scrollTop = 0;
-    }
+    setEditIndex(data.length);
+    setNewEntryIndex(data.length);
   };
 
   const handleEntryChange = (index, field, value) => {
@@ -219,6 +221,7 @@ export default function EducationEditor({ data, onChange }) {
                           <div className="flex-1">
                             <Label>Von</Label>
                             <input
+                              ref={editInputRef}
                               type="text"
                               value={entry.start}
                               onChange={(e) => handleEntryChange(index, 'start', e.target.value)}

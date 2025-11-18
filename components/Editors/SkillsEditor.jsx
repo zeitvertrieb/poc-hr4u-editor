@@ -59,6 +59,7 @@ export default function SkillsEditor({ data, onChange }) {
   const [tempEditValue, setTempEditValue] = useState({ name: "", rating: 0 });
 
   const selectAllCheckboxRef = useRef(null);
+  const editInputRef = useRef(null);
 
   const allItemIds = useMemo(() => {
     const ids = { categories: {}, subcategories: {}, skills: {} };
@@ -112,6 +113,12 @@ export default function SkillsEditor({ data, onChange }) {
       }
     }
   }, [selectedItems, allItemIds]);
+
+  useEffect(() => {
+    if (editItem && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [editItem]);
 
   const toggleAll = () => {
     if (isAllOpen) {
@@ -179,9 +186,9 @@ export default function SkillsEditor({ data, onChange }) {
 
     if (type === 'category') {
       const newCat = { ...newCategoryDefault, subcategories: [] };
-      newData = [newCat, ...data];
+      newData = [...data, newCat];
       onChange(newData);
-      setEditItem({ type: 'category', catIndex: 0 });
+      setEditItem({ type: 'category', catIndex: data.length });
       setTempEditValue({ name: newCat.category });
     }
 
@@ -486,7 +493,7 @@ export default function SkillsEditor({ data, onChange }) {
                   </button>
 
                   {isThisCatEditing ? (
-                    <input type="text" placeholder='z.B. IT-Skills' value={tempEditValue.name} onChange={(e) => setTempEditValue({ name: e.target.value })} className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
+                    <input ref={editInputRef} type="text" placeholder='z.B. IT-Skills' value={tempEditValue.name} onChange={(e) => setTempEditValue({ name: e.target.value })} className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
                   ) : (
                     <span className="flex-1 font-bold uppercase">{category.category}</span>
                   )}
@@ -524,7 +531,7 @@ export default function SkillsEditor({ data, onChange }) {
                         </button>
 
                         {isThisSubCatEditing ? (
-                          <input type="text" placeholder="z.B. Analyse-Methoden" value={tempEditValue.name} onChange={(e) => setTempEditValue({ name: e.target.value })} className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
+                          <input ref={editInputRef} type="text" placeholder="z.B. Analyse-Methoden" value={tempEditValue.name} onChange={(e) => setTempEditValue({ name: e.target.value })} className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
                         ) : (
                           <span className="flex-1 font-bold uppercase">{subCat.name}</span>
                         )}
@@ -557,7 +564,7 @@ export default function SkillsEditor({ data, onChange }) {
 
                             <div className="flex-1">
                               {isThisSkillEditing ? (
-                                <input type="text" placeholder='z.B. Fehler-Analyse' value={tempEditValue.name} onChange={(e) => setTempEditValue(prev => ({ ...prev, name: e.target.value }))} className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
+                                <input ref={editInputRef} type="text" placeholder='z.B. Fehler-Analyse' value={tempEditValue.name} onChange={(e) => setTempEditValue(prev => ({ ...prev, name: e.target.value }))} className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
                               ) : (
                                 <p>{skill.name}</p>
                               )}

@@ -26,6 +26,7 @@ export default function CoreQualificationsEditor({ data, onChange }) {
   const [newEntryIndex, setNewEntryIndex] = useState(null);
   const selectAllCheckboxRef = useRef(null);
   const listContainerRef = useRef(null);
+  const editInputRef = useRef(null);
 
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
@@ -36,6 +37,12 @@ export default function CoreQualificationsEditor({ data, onChange }) {
       }
     }
   }, [selectedIndices, data.length]);
+
+  useEffect(() => {
+    if (editIndex !== null && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [editIndex]);
 
   const handleSelectAll = () => {
     if (selectedIndices.length > 0) {
@@ -68,15 +75,10 @@ export default function CoreQualificationsEditor({ data, onChange }) {
   };
 
   const handleAddNew = () => {
-    const newData = [newEntryDefaults, ...data];
+    const newData = [...data, newEntryDefaults];
     onChange(newData);
-    setEditIndex(0);
-    setNewEntryIndex(0);
-    // Shift all existing selections down by one
-    setSelectedIndices(prev => prev.map(i => i + 1));
-    if (listContainerRef.current) {
-      listContainerRef.current.scrollTop = 0;
-    }
+    setEditIndex(data.length);
+    setNewEntryIndex(data.length);
   };
 
   const handleEntryChange = (index, field, value) => {
@@ -159,7 +161,7 @@ export default function CoreQualificationsEditor({ data, onChange }) {
                 <div className="flex-1 flex gap-6">
                   <div className='flex-1'>
                     <span className="text-xs font-bold uppercase">Name</span>
-                    {isThisRowEditing ? <input type="text" value={entry.name} onChange={(e) => handleEntryChange(index, 'name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. User Experience" /> : <p className="mt-1">{entry.name}</p>}
+                    {isThisRowEditing ? <input ref={editInputRef} type="text" value={entry.name} onChange={(e) => handleEntryChange(index, 'name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. User Experience" /> : <p className="mt-1">{entry.name}</p>}
                   </div>
                   <div className='flex-1 text-right'>
                     <span className="text-xs font-bold uppercase">Punkte</span>
