@@ -27,6 +27,7 @@ export default function CertificateEditor({ data, onChange }) {
   const [editIndex, setEditIndex] = useState(null);
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [newEntryIndex, setNewEntryIndex] = useState(null);
+  const [tempEntry, setTempEntry] = useState(null);
   const selectAllCheckboxRef = useRef(null);
   const listContainerRef = useRef(null);
   const editInputRef = useRef(null);
@@ -84,10 +85,14 @@ export default function CertificateEditor({ data, onChange }) {
     setNewEntryIndex(data.length);
   };
 
-  const handleEntryChange = (index, value) => {
-    const updatedEntries = data.map((item, i) => (i === index ? value : item));
-    onChange(updatedEntries);
+  const handleTempEntryChange = (value) => {
+    setTempEntry(value);
   };
+
+  const startEditing = (index) => {
+    setEditIndex(index);
+    setTempEntry(data[index]);
+  }
 
   const handleDelete = (indexToDelete) => {
     const newArray = data.filter((_, index) => index !== indexToDelete);
@@ -106,14 +111,18 @@ export default function CertificateEditor({ data, onChange }) {
   
   const handleSave = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
-      const entry = data[editIndex];
-      if (!entry || entry.trim() === "" || entry === newEntryDefault) {
+      if (!tempEntry || tempEntry.trim() === "" || tempEntry === newEntryDefault) {
         handleDelete(editIndex);
         return; 
       }
     }
+    const updatedData = [...data];
+    updatedData[editIndex] = tempEntry;
+    onChange(updatedData);
+
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
   };
   
   const handleCancel = () => {
@@ -122,6 +131,7 @@ export default function CertificateEditor({ data, onChange }) {
     }
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
   };
 
   const isSelectionActive = selectedIndices.length > 0;
@@ -204,8 +214,8 @@ export default function CertificateEditor({ data, onChange }) {
                     <input
                       ref={editInputRef}
                       type="text"
-                      value={certificate}
-                      onChange={(e) => handleEntryChange(index, e.target.value)}
+                      value={tempEntry || ''}
+                      onChange={(e) => handleTempEntryChange(e.target.value)}
                       className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                       placeholder="z.B. IREB CPRE Foundation Level"
                     />
@@ -235,7 +245,7 @@ export default function CertificateEditor({ data, onChange }) {
                   ) : (
                     <>
                       <button
-                        onClick={() => setEditIndex(index)}
+                        onClick={() => startEditing(index)}
                         className="text-interactive hover:text-interactive-hover"
                         title="Bearbeiten"
                         disabled={isEditingItem}

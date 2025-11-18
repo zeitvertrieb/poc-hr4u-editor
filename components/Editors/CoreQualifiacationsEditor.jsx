@@ -24,6 +24,7 @@ export default function CoreQualificationsEditor({ data, onChange }) {
   const [editIndex, setEditIndex] = useState(null);
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [newEntryIndex, setNewEntryIndex] = useState(null);
+  const [tempEntry, setTempEntry] = useState(null);
   const selectAllCheckboxRef = useRef(null);
   const listContainerRef = useRef(null);
   const editInputRef = useRef(null);
@@ -81,10 +82,15 @@ export default function CoreQualificationsEditor({ data, onChange }) {
     setNewEntryIndex(data.length);
   };
 
-  const handleEntryChange = (index, field, value) => {
-    const updatedEntries = data.map((item, i) => i === index ? { ...item, [field]: value } : item);
-    onChange(updatedEntries);
+  const handleTempEntryChange = (field, value) => {
+    setTempEntry(prev => ({ ...prev, [field]: value }));
   };
+
+  const startEditing = (index) => {
+    setEditIndex(index);
+    setTempEntry({ ...data[index] });
+  }
+
 
   const handleDelete = (indexToDelete) => {
     const newArray = data.filter((_, index) => index !== indexToDelete);
@@ -103,15 +109,19 @@ export default function CoreQualificationsEditor({ data, onChange }) {
 
   const handleSave = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
-      const entry = data[editIndex];
-      const isStillEmpty = Object.keys(newEntryDefaults).every(key => entry[key] === newEntryDefaults[key]);
+      const isStillEmpty = Object.keys(newEntryDefaults).every(key => tempEntry[key] === newEntryDefaults[key]);
       if (isStillEmpty) {
         handleDelete(editIndex);
         return;
       }
     }
+    const updatedData = [...data];
+    updatedData[editIndex] = tempEntry;
+    onChange(updatedData);
+
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
   };
   const handleCancel = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
@@ -119,6 +129,7 @@ export default function CoreQualificationsEditor({ data, onChange }) {
     }
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
   };
 
   const isSelectionActive = selectedIndices.length > 0;
@@ -161,19 +172,19 @@ export default function CoreQualificationsEditor({ data, onChange }) {
                 <div className="flex-1 flex gap-6">
                   <div className='flex-1'>
                     <span className="text-xs font-bold uppercase">Name</span>
-                    {isThisRowEditing ? <input ref={editInputRef} type="text" value={entry.name} onChange={(e) => handleEntryChange(index, 'name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. User Experience" /> : <p className="mt-1">{entry.name}</p>}
+                    {isThisRowEditing ? <input ref={editInputRef} type="text" value={tempEntry?.name || ''} onChange={(e) => handleTempEntryChange('name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. User Experience" /> : <p className="mt-1">{entry.name}</p>}
                   </div>
                   <div className='flex-1 text-right'>
                     <span className="text-xs font-bold uppercase">Punkte</span>
-                    {isThisRowEditing ? <div className='flex flex-col gap-2'><input type="text" value={entry.points} onChange={(e) => handleEntryChange(index, 'points', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 1.100" />  <p className='text-xs'>(1 Jahr = 220 PT)</p> </div> : <p className="mt-1">{entry.points}</p>}
+                    {isThisRowEditing ? <div className='flex flex-col gap-2'><input type="text" value={tempEntry?.points || ''} onChange={(e) => handleTempEntryChange('points', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 1.100" />  <p className='text-xs'>(1 Jahr = 220 PT)</p> </div> : <p className="mt-1">{entry.points}</p>}
                   </div>
                   <div className='flex-1 text-right'>
                     <span className="text-xs font-bold uppercase">Jahre</span>
-                    {isThisRowEditing ? <input type="text" value={entry.years} onChange={(e) => handleEntryChange(index, 'years', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 5" /> : <p className="mt-1">{entry.years}</p>}
+                    {isThisRowEditing ? <input type="text" value={tempEntry?.years || ''} onChange={(e) => handleTempEntryChange('years', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 5" /> : <p className="mt-1">{entry.years}</p>}
                   </div>
                   <div className='flex-1'>
                     <span className="text-xs font-bold uppercase">Level</span>
-                    {isThisRowEditing ? <input type="text" value={entry.level} onChange={(e) => handleEntryChange(index, 'level', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Ausgezeichnet" /> : <p className="mt-1">{entry.level}</p>}
+                    {isThisRowEditing ? <input type="text" value={tempEntry?.level || ''} onChange={(e) => handleTempEntryChange('level', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Ausgezeichnet" /> : <p className="mt-1">{entry.level}</p>}
                   </div>
                 </div>
                 <div className="flex gap-4 w-16 justify-end">
@@ -185,7 +196,7 @@ export default function CoreQualificationsEditor({ data, onChange }) {
                   ) : (
                     <>
                       <button onClick={() => setEditIndex(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
-                      <button onClick={() => handleDelete(index)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen" ><FontAwesomeIcon icon={faTrash} className="h-4 w-4" /></button>
+                      <button onClick={() => startEditing(index)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen" ><FontAwesomeIcon icon={faTrash} className="h-4 w-4" /></button>
                     </>
                   )}
                 </div>

@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 
 const sections = [
+  { key: 'profile', name: 'PROFIL' },
   { key: 'education', name: 'AUSBILDUNG' },
   { key: 'certifications', name: 'ZERTIFIKATE' },
   { key: 'professional_focus', name: 'FACHLICHE SCHWERPUNKTE' },

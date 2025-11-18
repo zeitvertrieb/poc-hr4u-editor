@@ -48,6 +48,7 @@ export default function ProjectsEditor({ data, onChange }) {
     const [editIndex, setEditIndex] = useState(null);
     const [selectedIndices, setSelectedIndices] = useState([]);
     const [newEntryIndex, setNewEntryIndex] = useState(null);
+    const [tempEntry, setTempEntry] = useState(null);
     const selectAllCheckboxRef = useRef(null);
     const listContainerRef = useRef(null);
     const editInputRef = useRef(null);
@@ -105,24 +106,27 @@ export default function ProjectsEditor({ data, onChange }) {
         setNewEntryIndex(data.length);
     };
 
-    const handleEntryChange = (index, field, value) => {
-        const updatedEntries = data.map((item, i) => (i === index ? { ...item, [field]: value } : item));
-        onChange(updatedEntries);
+    const handleTempEntryChange = (field, value) => {
+        setTempEntry(prev => ({ ...prev, [field]: value }));
     };
 
-    const handleTextareaChange = (e, index, field) => {
-        handleEntryChange(index, field, e.target.value);
+    const handleTextareaChange = (e, field) => {
+        handleTempEntryChange(field, e.target.value);
         e.target.style.height = 'auto';
         e.target.style.height = `${e.target.scrollHeight}px`;
     };
 
-    const handleArrayTextareaChange = (e, index, field) => {
+    const handleArrayTextareaChange = (e, field) => {
         const text = e.target.value;
         const arrayValue = textToArray(text);
-        handleEntryChange(index, field, arrayValue);
+        handleTempEntryChange(field, arrayValue);
         e.target.style.height = 'auto';
         e.target.style.height = `${e.target.scrollHeight}px`;
     };
+    const startEditing = (index) => {
+        setEditIndex(index);
+        setTempEntry({ ...data[index] });
+    }
 
     const handleDelete = (indexToDelete) => {
         const newArray = data.filter((_, index) => index !== indexToDelete);
@@ -141,15 +145,19 @@ export default function ProjectsEditor({ data, onChange }) {
     
     const handleSave = () => {
         if (editIndex === newEntryIndex && newEntryIndex !== null) {
-            const entry = data[editIndex];
-            const isStillEmpty = Object.values(entry).every(val => val === "");
+            const isStillEmpty = Object.values(tempEntry).every(val => val === "" || (Array.isArray(val) && val.length === 0));
             if (isStillEmpty) {
                 handleDelete(editIndex);
                 return;
             }
         }
+        const updatedData = [...data];
+        updatedData[editIndex] = tempEntry;
+        onChange(updatedData);
+
         setEditIndex(null);
         setNewEntryIndex(null);
+        setTempEntry(null);
     };
 
     const handleCancel = () => {
@@ -158,6 +166,7 @@ export default function ProjectsEditor({ data, onChange }) {
         }
         setEditIndex(null);
         setNewEntryIndex(null);
+        setTempEntry(null);
     };
 
     const isSelectionActive = selectedIndices.length > 0;
@@ -223,11 +232,11 @@ export default function ProjectsEditor({ data, onChange }) {
                                                 <div className="flex flex-col gap-2">
                                                     <div>
                                                         <Label>Von</Label>
-                                                        <input ref={editInputRef} type="text" value={entry.start} onChange={(e) => handleEntryChange(index, 'start', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Jan. 2023" />
+                                                        <input ref={editInputRef} type="text" value={tempEntry?.start || ''} onChange={(e) => handleTempEntryChange('start', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Jan. 2023" />
                                                     </div>
                                                     <div>
                                                         <Label>Bis</Label>
-                                                        <input type="text" value={entry.end} onChange={(e) => handleEntryChange(index, 'end', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Dez. 2025" />
+                                                        <input type="text" value={tempEntry?.end || ''} onChange={(e) => handleTempEntryChange('end', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Dez. 2025" />
                                                     </div>
                                                 </div>
                                                 <p className='text-xs'>Format: Mon. YYYY (z.B. Jan. 2025)</p>
@@ -243,7 +252,7 @@ export default function ProjectsEditor({ data, onChange }) {
                                     <div className="md:col-span-1">
                                         <Label>Firma</Label>
                                         {isThisRowEditing ? (
-                                            <input type="text" value={entry.firm} onChange={(e) => handleEntryChange(index, 'firm', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Tech Innovations" />
+                                            <input type="text" value={tempEntry?.firm || ''} onChange={(e) => handleTempEntryChange('firm', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Tech Innovations" />
                                         ) : (
                                             <p className="mt-1">{entry.firm}</p>
                                         )}
@@ -256,11 +265,11 @@ export default function ProjectsEditor({ data, onChange }) {
                                                 <div className="flex flex-col gap-2 mt-1">
                                                     <div>
                                                         <Label>Projektname</Label>
-                                                        <input type="text" value={entry.name} onChange={(e) => handleEntryChange(index, 'name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="User-Centric Design" />
+                                                        <input type="text" value={tempEntry?.name || ''} onChange={(e) => handleTempEntryChange('name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="User-Centric Design" />
                                                     </div>
                                                     <div>
                                                         <Label>Rolle</Label>
-                                                        <input type="text" value={entry.role} onChange={(e) => handleEntryChange(index, 'role', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. UX Designer" />
+                                                        <input type="text" value={tempEntry?.role || ''} onChange={(e) => handleTempEntryChange('role', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. UX Designer" />
                                                     </div>
                                                 </div>
                                             ) : (
@@ -276,8 +285,8 @@ export default function ProjectsEditor({ data, onChange }) {
                                                 <div>
                                                     <Label>Beschreibung</Label>
                                                     <textarea
-                                                        value={entry.description}
-                                                        onChange={(e) => handleTextareaChange(e, index, 'description')}
+                                                        value={tempEntry?.description || ''}
+                                                        onChange={(e) => handleTextareaChange(e, 'description')}
                                                         className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
                                                         rows="1" placeholder="Beschreibung..." />
                                                 </div>
@@ -289,7 +298,7 @@ export default function ProjectsEditor({ data, onChange }) {
                                             {isThisRowEditing ? (
                                                 <div>
                                                     <Label>Teamgröße</Label>
-                                                    <input type="text" value={entry.team_size} onChange={(e) => handleEntryChange(index, 'team_size', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. 8" />
+                                                    <input type="text" value={tempEntry?.team_size || ''} onChange={(e) => handleTempEntryChange('team_size', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. 8" />
                                                 </div>
                                             ) : (
                                                 <p>Teamgröße: {entry.team_size}</p>
@@ -300,8 +309,8 @@ export default function ProjectsEditor({ data, onChange }) {
                                             <p className="font-semibold">Meine Aufgaben umfassen dabei:</p>
                                             {isThisRowEditing ? (
                                                 <textarea
-                                                    value={arrayToText(entry.tasks)}
-                                                    onChange={(e) => handleArrayTextareaChange(e, index, 'tasks')}
+                                                value={arrayToText(tempEntry?.tasks)}
+                                                onChange={(e) => handleArrayTextareaChange(e, 'tasks')}
                                                     className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
                                                     rows="1" placeholder="Eine Aufgabe pro Zeile..." />
                                             ) : (
@@ -315,8 +324,8 @@ export default function ProjectsEditor({ data, onChange }) {
                                             <p className="font-semibold">Verwendete Technologien</p>
                                             {isThisRowEditing ? (
                                                 <textarea
-                                                    value={arrayToText(entry.technologies)}
-                                                    onChange={(e) => handleArrayTextareaChange(e, index, 'technologies')}
+                                                value={arrayToText(tempEntry?.technologies)}
+                                                onChange={(e) => handleArrayTextareaChange(e, 'technologies')}
                                                     className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
                                                     rows="1" placeholder="Eine Technologie pro Zeile..." />
                                             ) : (
@@ -336,7 +345,7 @@ export default function ProjectsEditor({ data, onChange }) {
                                         </>
                                     ) : (
                                         <>
-                                            <button onClick={() => setEditIndex(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
+                                        <button onClick={() => startEditing(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
                                             <button onClick={() => handleDelete(index)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen"><FontAwesomeIcon icon={faTrash} className="h-4 w-4" /></button>
                                         </>
                                     )}

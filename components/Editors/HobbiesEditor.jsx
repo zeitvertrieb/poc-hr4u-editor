@@ -19,6 +19,7 @@ export default function HobbiesEditor({ data, onChange }) {
   const [editIndex, setEditIndex] = useState(null);
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [newEntryIndex, setNewEntryIndex] = useState(null);
+  const [tempEntry, setTempEntry] = useState(null);
   const selectAllCheckboxRef = useRef(null);
   const listContainerRef = useRef(null);
   const editInputRef = useRef(null);
@@ -76,10 +77,14 @@ export default function HobbiesEditor({ data, onChange }) {
     setNewEntryIndex(data.length);
   };
 
-  const handleEntryChange = (index, value) => {
-    const updatedEntries = data.map((item, i) => (i === index ? value : item));
-    onChange(updatedEntries);
+  const handleTempEntryChange = (value) => {
+    setTempEntry(value);
   };
+
+  const startEditing = (index) => {
+    setEditIndex(index);
+    setTempEntry(data[index]);
+  }
 
   const handleDelete = (indexToDelete) => {
     const newArray = data.filter((_, index) => index !== indexToDelete);
@@ -98,14 +103,18 @@ export default function HobbiesEditor({ data, onChange }) {
 
   const handleSave = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
-      const entry = data[editIndex];
-      if (!entry || entry.trim() === "" || entry === newEntryDefault) {
+      if (!tempEntry || tempEntry.trim() === "" || tempEntry === newEntryDefault) {
         handleDelete(editIndex);
         return;
       }
     }
+    const updatedData = [...data];
+    updatedData[editIndex] = tempEntry;
+    onChange(updatedData);
+
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
   };
 
   const handleCancel = () => {
@@ -114,6 +123,7 @@ export default function HobbiesEditor({ data, onChange }) {
     }
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
   };
 
   const isSelectionActive = selectedIndices.length > 0;
@@ -168,8 +178,8 @@ export default function HobbiesEditor({ data, onChange }) {
                     <input 
                       ref={editInputRef}
                       type="text"
-                      value={hobby}
-                      onChange={(e) => handleEntryChange(index, e.target.value)}
+                      value={tempEntry || ''}
+                      onChange={(e) => handleTempEntryChange(e.target.value)}
                       className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                       placeholder="z.B. Kochen" />
                   ) : (
@@ -184,7 +194,7 @@ export default function HobbiesEditor({ data, onChange }) {
                     </>
                   ) : (
                     <>
-                      <button onClick={() => setEditIndex(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
+                      <button onClick={() => startEditing(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
                       <button onClick={() => handleDelete(index)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen"><FontAwesomeIcon icon={faTrash} className="h-4 w-4" /></button>
                     </>
                   )}

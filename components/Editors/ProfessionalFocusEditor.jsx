@@ -27,6 +27,7 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
   const [editIndex, setEditIndex] = useState(null);
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [newEntryIndex, setNewEntryIndex] = useState(null);
+  const [tempEntry, setTempEntry] = useState(null);
   const selectAllCheckboxRef = useRef(null);
   const listContainerRef = useRef(null);
   const editInputRef = useRef(null);
@@ -84,16 +85,20 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
     setNewEntryIndex(data.length);
   };
 
-  const handleEntryChange = (index, value) => {
-    const updatedEntries = data.map((item, i) => (i === index ? value : item));
-    onChange(updatedEntries);
+  const handleTempEntryChange = (value) => {
+    setTempEntry(value);
   };
 
-  const handleTextareaChange = (e, index) => {
-    handleEntryChange(index, e.target.value);
+  const handleTextareaChange = (e) => {
+    handleTempEntryChange(e.target.value);
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
+
+  const startEditing = (index) => {
+    setEditIndex(index);
+    setTempEntry(data[index]);
+  }
 
   const handleDelete = (indexToDelete) => {
     const newArray = data.filter((_, index) => index !== indexToDelete);
@@ -112,16 +117,20 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
 
   const handleSave = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
-      const entry = data[editIndex];
-      if (!entry || entry.trim() === "" || entry === newEntryDefault) {
+      if (!tempEntry || tempEntry.trim() === "" || tempEntry === newEntryDefault) {
         handleDelete(editIndex);
         return;
       }
     }
+    const updatedData = [...data];
+    updatedData[editIndex] = tempEntry;
+    onChange(updatedData);
+
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
   };
-
+  
   const handleCancel = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
       handleDelete(editIndex);
@@ -129,6 +138,7 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
     setEditIndex(null);
     setNewEntryIndex(null);
   };
+  
 
 
   const isSelectionActive = selectedIndices.length > 0;
@@ -209,8 +219,8 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
                   {isThisRowEditing ? (
                     <textarea
                       ref={editInputRef}
-                      value={focus}
-                      onChange={(e) => handleTextareaChange(e, index)}
+                      value={tempEntry || ''}
+                      onChange={handleTextareaChange}
                       className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
                       rows="1"
                       placeholder="z.B. Durchführung von Benutzerforschung..."
@@ -228,7 +238,7 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
                     </>
                   ) : (
                     <>
-                      <button onClick={() => setEditIndex(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten" > <FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /> </button>
+                      <button onClick={() => startEditing(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten" > <FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /> </button>
                       <button onClick={() => handleDelete(index)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen" > <FontAwesomeIcon icon={faTrash} className="h-4 w-4" /> </button>
                     </>
                   )}

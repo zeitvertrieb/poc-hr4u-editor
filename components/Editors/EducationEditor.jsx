@@ -40,7 +40,9 @@ export default function EducationEditor({ data, onChange }) {
   const [editIndex, setEditIndex] = useState(null);
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [newEntryIndex, setNewEntryIndex] = useState(null);
+  const [tempEntry, setTempEntry] = useState(null);
   const selectAllCheckboxRef = useRef(null);
+  const [errors, setErrors] = useState({});
   const listContainerRef = useRef(null);
   const editInputRef = useRef(null);
 
@@ -97,10 +99,19 @@ export default function EducationEditor({ data, onChange }) {
     setNewEntryIndex(data.length);
   };
 
-  const handleEntryChange = (index, field, value) => {
-    const updatedEntries = data.map((item, i) => (i === index ? { ...item, [field]: value } : item));
-    onChange(updatedEntries);
+  const handleTempEntryChange = (field, value) => {
+    setTempEntry(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: null }));
+    }
   };
+
+  const startEditing = (index) => {
+    setEditIndex(index);
+    setTempEntry({ ...data[index] });
+    setErrors({});
+  };
+
 
   const handleDelete = (indexToDelete) => {
     const newArray = data.filter((_, index) => index !== indexToDelete);
@@ -118,16 +129,35 @@ export default function EducationEditor({ data, onChange }) {
   };
 
   const handleSave = () => {
+    if (editIndex === null) return;
+
+    const newErrors = {};
+
+    if (!tempEntry.degree || tempEntry.degree.trim() === "") {
+      newErrors.degree = "Der Abschluss muss ausgefüllt werden.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    const updatedData = [...data];
+    updatedData[editIndex] = tempEntry;
+    onChange(updatedData);
+
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
-      const entry = data[editIndex];
-      const isStillEmpty = Object.values(entry).every(val => val === "");
+      const isStillEmpty = Object.values(tempEntry).every(val => val === "");
       if (isStillEmpty) {
         handleDelete(editIndex);
         return;
       }
     }
+
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
+    setErrors({});
   };
 
   const handleCancel = () => {
@@ -136,6 +166,9 @@ export default function EducationEditor({ data, onChange }) {
     }
     setEditIndex(null);
     setNewEntryIndex(null);
+    setTempEntry(null);
+
+    setErrors({});
   };
 
   const isSelectionActive = selectedIndices.length > 0;
@@ -223,8 +256,8 @@ export default function EducationEditor({ data, onChange }) {
                             <input
                               ref={editInputRef}
                               type="text"
-                              value={entry.start}
-                              onChange={(e) => handleEntryChange(index, 'start', e.target.value)}
+                              value={tempEntry?.start || ''}
+                              onChange={(e) => handleTempEntryChange('start', e.target.value)}
                               className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                               placeholder="z.B. Sep. 2025"
                             />
@@ -234,8 +267,8 @@ export default function EducationEditor({ data, onChange }) {
                             <Label>Bis</Label>
                             <input
                               type="text"
-                              value={entry.end}
-                              onChange={(e) => handleEntryChange(index, 'end', e.target.value)}
+                              value={tempEntry?.end || ''}
+                              onChange={(e) => handleTempEntryChange('end', e.target.value)}
                               className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                               placeholder="z.B. Juni 2025"
                             />
@@ -255,13 +288,20 @@ export default function EducationEditor({ data, onChange }) {
                   <div className='flex-1'>
                     <Label>Abschluss</Label>
                     {isThisRowEditing ? (
-                      <input
-                        type="text"
-                        value={entry.degree}
-                        onChange={(e) => handleEntryChange(index, 'degree', e.target.value)}
-                        className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
-                        placeholder="z.B. Master"
-                      />
+                      <>
+                        <input
+                          type="text"
+                          value={tempEntry?.degree || ''}
+                          onChange={e => handleTempEntryChange('degree', e.target.value)}
+                          className={`mt-1 w-full p-1 bg-surface-rise border-b  focus:outline-none ${
+                            errors.degree
+                              ? 'border-interactive-critical'
+                              : 'border-border focus:border-interactive-active'
+                          }`}
+                          placeholder="z.B. Master"
+                        />
+                        {errors.degree && <p className="text-xs text-interactive-critical mt-1">{errors.degree}</p>}
+                      </>
                     ) : (
                       <p className="mt-1">{entry.degree}</p>
                     )}
@@ -272,8 +312,8 @@ export default function EducationEditor({ data, onChange }) {
                     {isThisRowEditing ? (
                       <input
                         type="text"
-                        value={entry.institution}
-                        onChange={(e) => handleEntryChange(index, 'institution', e.target.value)}
+                        value={tempEntry?.institution || ''}
+                        onChange={(e) => handleTempEntryChange('institution', e.target.value)}
                         className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                         placeholder="z.B. FH Technikum"
                       />
@@ -287,7 +327,7 @@ export default function EducationEditor({ data, onChange }) {
                   {isThisRowEditing ? (
                     <>
                       <button
-                        onClick={() => handleSave(index)}
+                        onClick={handleSave}
                         className="text-interactive hover:text-interactive-hover"
                         title="Speichern"
                       >
@@ -304,7 +344,7 @@ export default function EducationEditor({ data, onChange }) {
                   ) : (
                     <>
                       <button
-                        onClick={() => setEditIndex(index)}
+                        onClick={() => startEditing(index)}
                         className="text-interactive hover:text-interactive-hover"
                         title="Bearbeiten"
                       >

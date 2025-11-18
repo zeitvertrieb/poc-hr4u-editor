@@ -8,7 +8,6 @@ import SectionSidebar from '@/components/Navigation/SectionSidebar';
 import EducationView from '@/components/Views/EducationView';
 import EducationEditor from '@/components/Editors/EducationEditor';
 import { STORAGE_KEY } from "@/lib/constants";
-import ProfileEditorDialog from "@/components/ProfileEditorDialogue";
 import CertificateEditor from "@/components/Editors/CertificateEditor";
 import CertificateView from "@/components/Views/CertificateView";
 import ProfessionalFocusEditor from "@/components/Editors/ProfessionalFocusEditor";
@@ -23,6 +22,8 @@ import ProjectsEditor from "@/components/Editors/ProjectsEditor";
 import ProjectsView from "@/components/Views/ProjectsView";
 import SkillsEditor from "@/components/Editors/SkillsEditor";
 import SkillsView from "@/components/Views/SkillsView";
+import ProfileEditor from "@/components/Editors/ProfileEditor";
+import ProfileView from "@/components/Views/ProfileView";
 
 
 export default function ClientContentPage() {
@@ -34,7 +35,7 @@ export default function ClientContentPage() {
 
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
 
-  const currentSection = searchParams.get('section') || 'education';
+  const currentSection = searchParams.get('section') || 'profile';
   const isEditing = searchParams.get('edit') === 'true';
 
   useEffect(() => {
@@ -55,6 +56,12 @@ export default function ClientContentPage() {
     setIsLoading(false);
   }, [router]);
 
+  useEffect(() => {
+    if (content && !isLoading) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+    }
+  }, [content, isLoading]);
+
   const handleStepClick = (stepId) => {
     const sectionQuery = `?section=${currentSection}`;
     if (stepId === 2) {
@@ -62,7 +69,6 @@ export default function ClientContentPage() {
     } else if (stepId === 3) {
       router.push(`/content${sectionQuery}&edit=true`);
     } else if (stepId === 4) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
       router.push('/preview');
     }
   };
@@ -71,7 +77,6 @@ export default function ClientContentPage() {
   const handleHeaderButtonClick = () => {
     const sectionQuery = `?section=${currentSection}`;
     if (isEditing) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
       router.push('/preview');
     } else {
       router.push(`/content${sectionQuery}&edit=true`);
@@ -95,6 +100,13 @@ export default function ClientContentPage() {
 
   const renderContent = () => {
     switch (currentSection) {
+      case  'profile':
+        return isEditing ? (
+          <ProfileEditor data={content} onChange={handleProfileSave} />
+        ) : (
+          <ProfileView data={content} />
+        );
+
       case 'education':
         return isEditing ? (
           <EducationEditor data={content.education}
@@ -191,8 +203,7 @@ export default function ClientContentPage() {
       <div className="flex flex-1 overflow-hidden">
         <aside className="w-80 flex-shrink-0 bg-surface-rise border-r border-border overflow-y-auto">
           <ProfileSidebar 
-            user={content} 
-            onEditClick={() => setIsProfileDialogOpen(true)}
+            user={content}
           />
           <SectionSidebar />
         </aside>
@@ -200,13 +211,6 @@ export default function ClientContentPage() {
           {renderContent()}
         </main>
       </div>
-
-      <ProfileEditorDialog 
-        user={content}
-        isOpen={isProfileDialogOpen}
-        onClose={() => setIsProfileDialogOpen(false)}
-        onSave={handleProfileSave}
-      />
     </div>
   );
 }
