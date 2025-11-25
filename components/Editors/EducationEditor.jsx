@@ -11,23 +11,9 @@ import {
   faCheck,
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-
-function NavLink({ href, children }) {
-  return (
-    <Link href={href} className="text-sm font-medium text-interactive hover:text-interactive-hover">
-      {children}
-    </Link>
-  );
-}
-
-function Label({ children }) {
-  return (
-    <span className="text-xs font-bold uppercase text-primary">
-      {children}
-    </span>
-  );
-}
+import NavLink from '../common/NavLink';
+import Label from '../common/Label';
+import EditorLayout from './EditorLayout';
 
 const newEntryDefaults = {
   start: "",
@@ -175,53 +161,26 @@ export default function EducationEditor({ data, onChange }) {
   const isEditingItem = editIndex !== null;
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
-      <div className="flex flex-col mb-4 gap-4">
-        <h2 className="text-3xl font-bold text-primary font-zilla-slab">Ausbildung</h2>
-        <div className="flex items-center gap-4">
-          <NavLink href="/content?section=hobbies">
-            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Hobbies
-          </NavLink>
-          <NavLink href="/content?section=certifications">
-            Zertifikate<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
-          </NavLink>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-6 mt-8 py-2 px-4 border-b border-border">
-        <input
-          type="checkbox"
-          className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
-          ref={selectAllCheckboxRef}
-          checked={selectedIndices.length === data.length && data.length > 0}
-          onChange={handleSelectAll}
-          disabled={isEditingItem}
-        />
-        {isSelectionActive ? (
-          <>
-            <span className="text-sm font-bold text-primary">
-              {selectedIndices.length} AUSGEWÄHLT
-            </span>
-            <button
-              onClick={handleDeselectAll}
-              className="text-sm font-bold text-interactive hover:underline"
-            >
-              AUSWAHL AUFHEBEN
-            </button>
-            <button
-              onClick={handleDeleteSelected}
-              className="text-sm font-bold text-interactive-critical hover:underline"
-            >
-              AUSWAHL LÖSCHEN
-            </button>
-          </>
-        ) : (
-          <span className="text-sm text-primary font-bold uppercase">
-            {data.length} {data.length === 1 ? 'AUSBILDUNG' : 'AUSBILDUNGEN'}
-          </span>
-        )}
-      </div>
-
+    <EditorLayout
+      title="Ausbildung"
+      navLinks={
+        <>
+          <NavLink href="/content?section=profile&edit=true"><FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Profil</NavLink>
+          <NavLink href="/content?section=certifications&edit=true">Zertifikate<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" /></NavLink>
+        </>
+      }
+      itemCount={data.length}
+      itemName="AUSBILDUNG"
+      itemNamePlural="AUSBILDUNGEN"
+      isSelectionActive={isSelectionActive}
+      selectedCount={selectedIndices.length}
+      onSelectAll={handleSelectAll}
+      onDeselectAll={handleDeselectAll}
+      onDeleteSelected={handleDeleteSelected}
+      isEditingItem={isEditingItem}
+      selectAllCheckboxRef={selectAllCheckboxRef}
+      addNewButton={<button onClick={handleAddNew} className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"><FontAwesomeIcon icon={faPlus} className="h-3 w-3" />AUSBILDUNG HINZUFÜGEN</button>}
+    >
       <div className="flex flex-col gap-4 mt-4" ref={listContainerRef}>
         {data.length > 0 ? (
           data.map((entry, index) => {
@@ -378,17 +337,6 @@ export default function EducationEditor({ data, onChange }) {
         )}
       </div>
 
-      {data.length > 0 && (
-        <div className="flex justify-end mt-6">
-          <button
-            onClick={handleAddNew}
-            className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
-          >
-            <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
-            AUSBILDUNG HINZUFÜGEN
-          </button>
-        </div>
-      )}
-    </div>
+    </EditorLayout>
   );
 }

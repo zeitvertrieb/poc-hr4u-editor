@@ -11,23 +11,9 @@ import {
     faCheck,
     faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-
-function NavLink({ href, children }) {
-    return (
-        <Link href={href} className="text-sm font-medium text-interactive hover:text-interactive-hover">
-            {children}
-        </Link>
-    );
-}
-
-function Label({ children }) {
-    return (
-        <span className="text-xs font-bold uppercase text-primary">
-            {children}
-        </span>
-    );
-}
+import NavLink from '../common/NavLink';
+import EditorLayout from './EditorLayout';
+import Label from '../common/Label';
 
 const newEntryDefaults = {
     start: "",
@@ -142,7 +128,7 @@ export default function ProjectsEditor({ data, onChange }) {
             setNewEntryIndex(null);
         }
     };
-    
+
     const handleSave = () => {
         if (editIndex === newEntryIndex && newEntryIndex !== null) {
             const isStillEmpty = Object.values(tempEntry).every(val => val === "" || (Array.isArray(val) && val.length === 0));
@@ -173,39 +159,31 @@ export default function ProjectsEditor({ data, onChange }) {
     const isEditingItem = editIndex !== null;
 
     return (
-        <div className="w-full max-w-6xl mx-auto px-2">
-            <div className="flex flex-col mb-4 gap-4">
-                <h2 className="text-3xl font-bold text-primary font-zilla-slab">Projekterfahrung</h2>
-                <div className="flex items-center gap-4">
-                    <NavLink href="/content?section=industry_experience">
-                        <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Branchenerfahrung
+        <EditorLayout
+            title="Projekterfahrung"
+            navLinks={
+                <>
+                    <NavLink href="/content?section=industry_experience&edit=true"><FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
+                        Branchenerfahrung
                     </NavLink>
-                    <NavLink href="/content?section=skills">
-                        Skills<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
+                    <NavLink href="/content?section=skills&edit=true">
+                        Skills
+                        <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
                     </NavLink>
-                </div>
-            </div>
-
-            <div className="flex items-center gap-6 mt-8 py-2 px-4 border-b border-border">
-                <input
-                    type="checkbox"
-                    className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
-                    ref={selectAllCheckboxRef}
-                    checked={selectedIndices.length === data.length && data.length > 0}
-                    onChange={handleSelectAll}
-                    disabled={isEditingItem}
-                />
-                {isSelectionActive ? (
-                    <>
-                        <span className="text-sm font-bold text-primary">{selectedIndices.length} AUSGEWÄHLT</span>
-                        <button onClick={handleDeselectAll} className="text-sm font-bold text-interactive hover:underline">AUSWAHL AUFHEBEN</button>
-                        <button onClick={handleDeleteSelected} className="text-sm font-bold text-interactive-critical hover:underline">AUSWAHL LÖSCHEN</button>
-                    </>
-                ) : (
-                    <span className="text-sm text-primary font-bold uppercase">{data.length} {data.length === 1 ? 'PROJEKT' : 'PROJEKTE'}</span>
-                )}
-            </div>
-
+                </>
+            }
+            itemCount={data.length}
+            itemName="PROJEKT"
+            itemNamePlural="PROJEKTE"
+            isSelectionActive={isSelectionActive}
+            selectedCount={selectedIndices.length}
+            onSelectAll={handleSelectAll}
+            onDeselectAll={handleDeselectAll}
+            onDeleteSelected={handleDeleteSelected}
+            isEditingItem={isEditingItem}
+            selectAllCheckboxRef={selectAllCheckboxRef}
+            addNewButton={<button onClick={handleAddNew} className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"><FontAwesomeIcon icon={faPlus} className="h-3 w-3" />PROJEKT HINZUFÜGEN</button>}
+        >
             <div className="mt-4 space-y-4" ref={listContainerRef}>
                 {data.length > 0 ? (
                     data.map((entry, index) => {
@@ -309,8 +287,8 @@ export default function ProjectsEditor({ data, onChange }) {
                                             <p className="font-semibold">Meine Aufgaben umfassen dabei:</p>
                                             {isThisRowEditing ? (
                                                 <textarea
-                                                value={arrayToText(tempEntry?.tasks)}
-                                                onChange={(e) => handleArrayTextareaChange(e, 'tasks')}
+                                                    value={arrayToText(tempEntry?.tasks)}
+                                                    onChange={(e) => handleArrayTextareaChange(e, 'tasks')}
                                                     className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
                                                     rows="1" placeholder="Eine Aufgabe pro Zeile..." />
                                             ) : (
@@ -324,8 +302,8 @@ export default function ProjectsEditor({ data, onChange }) {
                                             <p className="font-semibold">Verwendete Technologien</p>
                                             {isThisRowEditing ? (
                                                 <textarea
-                                                value={arrayToText(tempEntry?.technologies)}
-                                                onChange={(e) => handleArrayTextareaChange(e, 'technologies')}
+                                                    value={arrayToText(tempEntry?.technologies)}
+                                                    onChange={(e) => handleArrayTextareaChange(e, 'technologies')}
                                                     className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
                                                     rows="1" placeholder="Eine Technologie pro Zeile..." />
                                             ) : (
@@ -345,7 +323,7 @@ export default function ProjectsEditor({ data, onChange }) {
                                         </>
                                     ) : (
                                         <>
-                                        <button onClick={() => startEditing(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
+                                            <button onClick={() => startEditing(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
                                             <button onClick={() => handleDelete(index)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen"><FontAwesomeIcon icon={faTrash} className="h-4 w-4" /></button>
                                         </>
                                     )}
@@ -368,14 +346,6 @@ export default function ProjectsEditor({ data, onChange }) {
                 )}
             </div>
 
-            {data.length > 0 && (
-                <div className="flex justify-end mt-6">
-                    <button onClick={handleAddNew} className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover">
-                        <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
-                        PROJEKT HINZUFÜGEN
-                    </button>
-                </div>
-            )}
-        </div>
+        </EditorLayout>
     );
 }

@@ -21,7 +21,7 @@ export default function FileUpload() {
           localStorage.setItem(STORAGE_KEY, text);
           console.log("JSON data saved to localStorage.");
 
-          router.push('/content?section=education');
+          router.push('/content');
 
         } catch (err) {
           console.error("Error reading or saving file:", err);

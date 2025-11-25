@@ -28,24 +28,31 @@ export default function IndustryExperienceView({ data }) {
       </div>
 
       <div className="space-y-6 mt-8">
-        {data.map((entry, index) => (
-          <div key={index} className="bg-surface-rise p-4 border border-border">
-            <div className="flex gap-6">
-              <div className='w-full'>
-                <span className="text-xs font-bold uppercase">Name</span>
-                <p className="mt-1">{entry.name}</p>
-              </div>
-              <div className='w-full'>
-                <span className="text-xs font-bold uppercase">Jahre</span>
-                <p className="mt-1">{entry.years}</p>
-              </div>
-              <div className='w-full'>
-                <span className="text-xs font-bold uppercase">Monate</span>
-                <p className="mt-1">{entry.months}</p>
+        {data && data.length > 0 ? (
+          data.map((entry, index) => (
+            <div key={index} className="bg-surface-rise p-4 border border-border">
+              <div className="flex gap-6">
+                <div className='w-full'>
+                  <span className="text-xs font-bold uppercase">Name</span>
+                  <p className="mt-1">{entry.name}</p>
+                </div>
+                <div className='w-full'>
+                  <span className="text-xs font-bold uppercase">Jahre</span>
+                  <p className="mt-1">{entry.years}</p>
+                </div>
+                <div className='w-full'>
+                  <span className="text-xs font-bold uppercase">Monate</span>
+                  <p className="mt-1">{entry.months}</p>
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="text-center py-12 px-6 bg-surface-rise border border-border">
+            <h3 className="text-lg font-semibold text-primary">Keine Branchenerfahrung vorhanden</h3>
+            <p className="mt-2 text-sm text-secondary">In dieser Kategorie wurden noch keine Einträge hinzugefügt.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

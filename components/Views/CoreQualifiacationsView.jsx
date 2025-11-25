@@ -28,28 +28,35 @@ export default function CoreQualificationsView({ data }) {
       </div>
 
       <div className="space-y-6 mt-8">
-        {data.map((entry, index) => (
-          <div key={index} className="bg-surface-rise p-4 border border-border">
-            <div className="flex gap-6">
-              <div className='w-full'>
-                <span className="text-xs font-bold uppercase">Name</span>
-                <p className="mt-1">{entry.name}</p>
-              </div>
-              <div className='w-full'>
-                <span className="text-xs font-bold uppercase">Punkte</span>
-                <p className="mt-1">{entry.points}</p>
-              </div>
-              <div className='w-full'>
-                <span className="text-xs font-bold uppercase">Jahre</span>
-                <p className="mt-1">{entry.years}</p>
-              </div>
-              <div className='w-full'>
-                <span className="text-xs font-bold uppercase">Level</span>
-                <p className="mt-1">{entry.level}</p>
+        {data && data.length > 0 ? (
+          data.map((entry, index) => (
+            <div key={index} className="bg-surface-rise p-4 border border-border">
+              <div className="flex gap-6">
+                <div className='w-full'>
+                  <span className="text-xs font-bold uppercase">Name</span>
+                  <p className="mt-1">{entry.name}</p>
+                </div>
+                <div className='w-full'>
+                  <span className="text-xs font-bold uppercase">Punkte</span>
+                  <p className="mt-1">{entry.points}</p>
+                </div>
+                <div className='w-full'>
+                  <span className="text-xs font-bold uppercase">Jahre</span>
+                  <p className="mt-1">{entry.years}</p>
+                </div>
+                <div className='w-full'>
+                  <span className="text-xs font-bold uppercase">Level</span>
+                  <p className="mt-1">{entry.level}</p>
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="text-center py-12 px-6 bg-surface-rise border border-border">
+            <h3 className="text-lg font-semibold text-primary">Keine Kernqualifikationen vorhanden</h3>
+            <p className="mt-2 text-sm text-secondary">In dieser Kategorie wurden noch keine Einträge hinzugefügt.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

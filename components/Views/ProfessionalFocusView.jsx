@@ -28,11 +28,18 @@ export default function ProfessionalFocusView({ data }) {
       </div>
 
       <div className="space-y-4 mt-8">
-        {data.map((focus, index) => (
-          <div key={index} className="bg-surface-rise p-4 border border-border">
-            <p className="mt-1">{focus}</p>
+        {data && data.length > 0 ? (
+          data.map((focus, index) => (
+            <div key={index} className="bg-surface-rise p-4 border border-border">
+              <p className="mt-1">{focus}</p>
+            </div>
+          ))
+        ) : (
+          <div className="text-center py-12 px-6 bg-surface-rise border border-border">
+            <h3 className="text-lg font-semibold text-primary">Keine Fachlichen Schwerpunkte vorhanden</h3>
+            <p className="mt-2 text-sm text-secondary">In dieser Kategorie wurden noch keine Einträge hinzugefügt.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

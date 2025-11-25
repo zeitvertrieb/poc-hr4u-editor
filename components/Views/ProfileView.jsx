@@ -1,12 +1,9 @@
 'use client'
 
-function Label({ children }) {
-    return (
-        <span className="text-xs font-bold uppercase text-primary">
-            {children}
-        </span>
-    );
-}
+import NavLink from '../common/NavLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import Label from '../common/Label';
 
 export default function ProfileView({ data }) {
     if (!data) return null;
@@ -15,6 +12,10 @@ export default function ProfileView({ data }) {
         <div className="w-full max-w-6xl mx-auto">
             <div className="flex flex-col mb-4 gap-4">
                 <h2 className="text-3xl font-bold text-primary font-zilla-slab">Profil</h2>
+                <div className='flex items-center gap-4'>
+                    <NavLink href="/content?section=hobbies"><FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Hobbies</NavLink>
+                    <NavLink href="/content?section=education">Ausbildungen<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" /></NavLink>
+                </div>
             </div>
 
             <div className="mt-8 p-6 bg-surface-rise border border-border space-y-6">
@@ -30,7 +31,7 @@ export default function ProfileView({ data }) {
                     <Label>Geburtsjahr</Label>
                     <p className="mt-1">{data.birthyear}</p>
                 </div>
-                 <div>
+                <div>
                     <Label>Staatsangehörigkeit</Label>
                     <p className="mt-1">{data.nationality}</p>
                 </div>

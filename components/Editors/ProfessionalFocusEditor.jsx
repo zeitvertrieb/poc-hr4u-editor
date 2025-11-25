@@ -11,15 +11,8 @@ import {
   faCheck,
   faTimes
 } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-
-function NavLink({ href, children }) {
-  return (
-    <Link href={href} className="text-sm font-medium text-interactive hover:text-interactive-hover">
-      {children}
-    </Link>
-  );
-}
+import NavLink from '../common/NavLink';
+import EditorLayout from './EditorLayout';
 
 const newEntryDefault = "";
 
@@ -130,7 +123,7 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
     setNewEntryIndex(null);
     setTempEntry(null);
   };
-  
+
   const handleCancel = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
       handleDelete(editIndex);
@@ -138,60 +131,39 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
     setEditIndex(null);
     setNewEntryIndex(null);
   };
-  
+
 
 
   const isSelectionActive = selectedIndices.length > 0;
   const isEditingItem = editIndex !== null;
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
-      <div className="flex flex-col mb-4 gap-4">
-        <h2 className="text-3xl font-bold text-primary font-zilla-slab">Fachliche Schwerpunkte</h2>
-        <div className="flex items-center gap-4">
-          <NavLink href="/content?section=certifications">
-            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Zertifikate
+    <EditorLayout
+      title="Fachliche Schwerpunkte"
+      navLinks={
+        <>
+          <NavLink href="/content?section=certifications&edit=true">
+            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
+            Zertifikate
           </NavLink>
-          <NavLink href="/content?section=core_qualifications">
-            Kernqualifikationen<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
+          <NavLink href="/content?section=core_qualifications&edit=true">
+            Kernqualifikationen
+            <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
           </NavLink>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-6 mt-8 py-2 px-4 border-b border-border">
-        <input
-          type="checkbox"
-          className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
-          ref={selectAllCheckboxRef}
-          checked={selectedIndices.length === data.length && data.length > 0}
-          onChange={handleSelectAll}
-          disabled={isEditingItem}
-        />
-        {isSelectionActive ? (
-          <>
-            <span className="text-sm font-bold text-primary">
-              {selectedIndices.length} AUSGEWÄHLT
-            </span>
-            <button
-              onClick={handleDeselectAll}
-              className="text-sm font-bold text-interactive hover:underline"
-            >
-              AUSWAHL AUFHEBEN
-            </button>
-            <button
-              onClick={handleDeleteSelected}
-              className="text-sm font-bold text-interactive-critical hover:underline"
-            >
-              AUSWAHL LÖSCHEN
-            </button>
-          </>
-        ) : (
-          <span className="text-sm text-primary font-bold uppercase">
-            {data.length} {data.length === 1 ? 'SCHWERPUNKT' : 'SCHWERPUNKTE'}
-          </span>
-        )}
-      </div>
-
+        </>
+      }
+      itemCount={data.length}
+      itemName="SCHWERPUNKT"
+      itemNamePlural="SCHWERPUNKTE"
+      isSelectionActive={isSelectionActive}
+      selectedCount={selectedIndices.length}
+      onSelectAll={handleSelectAll}
+      onDeselectAll={handleDeselectAll}
+      onDeleteSelected={handleDeleteSelected}
+      isEditingItem={isEditingItem}
+      selectAllCheckboxRef={selectAllCheckboxRef}
+      addNewButton={<button onClick={handleAddNew} className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"><FontAwesomeIcon icon={faPlus} className="h-3 w-3" />SCHWERPUNKT HINZUFÜGEN</button>}
+    >
       <div className="space-y-4 mt-4" ref={listContainerRef}>
         {data.length > 0 ? (
           data.map((focus, index) => {
@@ -217,14 +189,17 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
 
                 <div className="flex-1">
                   {isThisRowEditing ? (
-                    <textarea
-                      ref={editInputRef}
-                      value={tempEntry || ''}
-                      onChange={handleTextareaChange}
-                      className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
-                      rows="1"
-                      placeholder="z.B. Durchführung von Benutzerforschung..."
-                    />
+                    <>
+                      <label className='sr-only'>Schwerpunkt</label>
+                      <textarea
+                        ref={editInputRef}
+                        value={tempEntry || ''}
+                        onChange={handleTextareaChange}
+                        className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none resize-none overflow-hidden"
+                        rows="1"
+                        placeholder="z.B. Durchführung von Benutzerforschung..."
+                      />
+                    </>
                   ) : (
                     <p className="mt-1">{focus}</p>
                   )}
@@ -261,17 +236,6 @@ export default function ProfessionalFocusEditor({ data, onChange }) {
         )}
       </div>
 
-      {data.length > 0 && (
-        <div className="flex justify-end mt-6">
-          <button
-            onClick={handleAddNew}
-            className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
-          >
-            <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
-            SCHWERPUNKT HINZUFÜGEN
-          </button>
-        </div>
-      )}
-    </div>
+    </EditorLayout>
   );
 }

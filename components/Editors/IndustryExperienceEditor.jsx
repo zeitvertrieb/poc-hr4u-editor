@@ -3,15 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faPencilAlt, faTrash, faPlus, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-
-function NavLink({ href, children }) {
-  return (
-    <Link href={href} className="text-sm font-medium text-interactive hover:text-interactive-hover">
-      {children}
-    </Link>
-  );
-}
+import NavLink from '../common/NavLink';
+import Label from '../common/Label';
 
 const newEntryDefaults = {
   name: "",
@@ -71,7 +64,6 @@ export default function IndustryExperienceEditor({ data, onChange }) {
     onChange(newData);
     setEditIndex(0);
     setNewEntryIndex(0);
-    // Shift all existing selections down by one
     setSelectedIndices(prev => prev.map(i => i + 1));
     if (listContainerRef.current) {
       listContainerRef.current.scrollTop = 0;
@@ -127,10 +119,11 @@ export default function IndustryExperienceEditor({ data, onChange }) {
       <div className="flex flex-col mb-4 gap-4">
         <h2 className="text-3xl font-bold text-primary font-zilla-slab">Branchenerfahrung</h2>
         <div className="flex items-center gap-4">
-          <NavLink href="/content?section=core_qualifications">
-            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Kernqualifikationen
+          <NavLink href="/content?section=core_qualifications&edit=true">
+            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
+            Kernqualifikationen
           </NavLink>
-          <NavLink href="/content?section=projects">
+          <NavLink href="/content?section=projects&edit=true">
             Projekterfahrung<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
           </NavLink>
         </div>
@@ -158,16 +151,16 @@ export default function IndustryExperienceEditor({ data, onChange }) {
                 {isThisRowEditing ? <div className="w-5 h-5 flex-shrink-0" /> : <input type="checkbox" className="h-5 w-5 text-interactive border-interactive focus:ring-interactive" checked={selectedIndices.includes(index)} onChange={() => handleItemSelect(index)} disabled={isEditingItem} />}
                 <div className="flex-1 flex gap-6">
                   <div className='flex-1'>
-                    <span className="text-xs font-bold uppercase">Name</span>
-                    {isThisRowEditing ? <input type="text" value={entry.name} onChange={(e) => handleEntryChange(index, 'name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Einzelhandel" /> : <p className="mt-1">{entry.name}</p>}
+                    <Label htmlFor={`name-${index}`}>Name</Label>
+                    {isThisRowEditing ? <input id={`name-${index}`} type="text" value={entry.name} onChange={(e) => handleEntryChange(index, 'name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Einzelhandel" /> : <p className="mt-1">{entry.name}</p>}
                   </div>
                   <div className='flex-1 text-right'>
-                    <span className="text-xs font-bold uppercase">Jahre</span>
-                    {isThisRowEditing ? <input type="text" value={entry.years} onChange={(e) => handleEntryChange(index, 'years', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 4" /> : <p className="mt-1 text-right">{entry.years}</p>}
+                    <Label htmlFor={`years-${index}`}>Jahre</Label>
+                    {isThisRowEditing ? <input id={`years-${index}`} type="text" value={entry.years} onChange={(e) => handleEntryChange(index, 'years', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 4" /> : <p className="mt-1 text-right">{entry.years}</p>}
                   </div>
                   <div className='flex-1 text-right'>
-                    <span className="text-xs font-bold uppercase">Monate</span>
-                    {isThisRowEditing ? <input type="text" value={entry.months} onChange={(e) => handleEntryChange(index, 'months', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 10" /> : <p className="mt-1 text-right">{entry.months}</p>}
+                    <Label htmlFor={`months-${index}`}>Monate</Label>
+                    {isThisRowEditing ? <input id={`months-${index}`} type="text" value={entry.months} onChange={(e) => handleEntryChange(index, 'months', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 10" /> : <p className="mt-1 text-right">{entry.months}</p>}
                   </div>
                 </div>
                 <div className="flex gap-4 w-16 justify-end">

@@ -12,9 +12,10 @@ import {
   faTimes,
   faChevronLeft
 } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
 import StarRating from '../Preview/StarRating';
 import StarRatingInput from '../StarRatingInput';
+import NavLink from '../common/NavLink';
+import Label from '../common/Label';
 
 const ratingMap = { "five": 5, "four": 4, "three": 3, "two": 2, "one": 1 };
 const ratingKeyMap = { 5: "five", 4: "four", 3: "three", 2: "two", 1: "one" };
@@ -33,14 +34,6 @@ function transformSkills(subCategory) {
     }
   }
   return skills;
-}
-
-function NavLink({ href, children }) {
-  return (
-    <Link href={href} className="text-sm font-medium text-interactive hover:text-interactive-hover">
-      {children}
-    </Link>
-  );
 }
 
 const newCategoryDefault = { category: "", subcategories: [] };
@@ -423,11 +416,13 @@ export default function SkillsEditor({ data, onChange }) {
       <div className="flex flex-col mb-4 gap-4">
         <h2 className="text-3xl font-bold font-zilla-slab">Skills</h2>
         <div className="flex items-center gap-4">
-          <NavLink href="/content?section=projects">
-            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Projekterfahrung
+          <NavLink href="/content?section=projects&edit=true">
+            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
+            Projekterfahrung
           </NavLink>
-          <NavLink href="/content?section=hobbies">
-            Hobbies<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
+          <NavLink href="/content?section=hobbies&edit=true">
+            Hobbies
+            <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
           </NavLink>
         </div>
       </div>
@@ -564,7 +559,10 @@ export default function SkillsEditor({ data, onChange }) {
 
                             <div className="flex-1">
                               {isThisSkillEditing ? (
-                                <input ref={editInputRef} type="text" placeholder='z.B. Fehler-Analyse' value={tempEditValue.name} onChange={(e) => setTempEditValue(prev => ({ ...prev, name: e.target.value }))} className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
+                                <>
+                                  <Label>Skills</Label>
+                                  <input ref={editInputRef} type="text" placeholder='z.B. Fehler-Analyse' value={tempEditValue.name} onChange={(e) => setTempEditValue(prev => ({ ...prev, name: e.target.value }))} className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
+                                </>
                               ) : (
                                 <p>{skill.name}</p>
                               )}
@@ -572,10 +570,13 @@ export default function SkillsEditor({ data, onChange }) {
 
                             <div className="flex-1">
                               {isThisSkillEditing ? (
-                                <StarRatingInput
-                                  rating={tempEditValue.rating}
-                                  onChange={(newRating) => setTempEditValue(prev => ({ ...prev, rating: newRating }))}
-                                />
+                                <>
+                                  <Label>Rating</Label>
+                                  <StarRatingInput
+                                    rating={tempEditValue.rating}
+                                    onChange={(newRating) => setTempEditValue(prev => ({ ...prev, rating: newRating }))}
+                                  />
+                                </>
                               ) : (
                                 <StarRating rating={skill.rating} />
                               )}

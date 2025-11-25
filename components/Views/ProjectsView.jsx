@@ -36,50 +36,57 @@ export default function ProjectsView({ data }) {
             </div>
 
             <div className="space-y-6 mt-8">
-                {data.map((entry, index) => (
-                    <div
-                        key={index}
-                        className="p-4 bg-surface-rise border border-border"
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                {data && data.length > 0 ? (
+                    data.map((entry, index) => (
+                        <div
+                            key={index}
+                            className="p-4 bg-surface-rise border border-border"
+                        >
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
 
-                            <div className="md:col-span-1">
-                                <Label>Zeitraum</Label>
-                                <p className="mt-1 w-max">{entry.start} - {entry.end}</p>
-                            </div>
-
-                            <div className="md:col-span-1">
-                                <Label>Firma</Label>
-                                <p className="mt-1">{entry.firm}</p>
-                            </div>
-
-                            <div className="md:col-span-3 space-y-4">
-                                <div>
-                                    <Label>Allgemeine Projektbeschreibung</Label>
-                                    <p className="mt-1 text-lg font-semibold text-primary">Project Name: {entry.name}</p>
-                                    <p className="mt-1">{entry.role}</p>
+                                <div className="md:col-span-1">
+                                    <Label>Zeitraum</Label>
+                                    <p className="mt-1 w-max">{entry.start} - {entry.end}</p>
                                 </div>
 
-                                <p>{entry.description}</p>
-                                <p>Teamgröße: {entry.team_size}</p>
+                                <div className="md:col-span-1">
+                                    <Label>Firma</Label>
+                                    <p className="mt-1">{entry.firm}</p>
+                                </div>
 
-                                <div>
-                                    <p className="font-semibold">Meine Aufgaben umfassen dabei:</p>
-                                    <div className="mt-1 space-y-1">
-                                        {entry.tasks.map((task, i) => <p key={i}>{task}</p>)}
+                                <div className="md:col-span-3 space-y-4">
+                                    <div>
+                                        <Label>Allgemeine Projektbeschreibung</Label>
+                                        <p className="mt-1 text-lg font-semibold text-primary">Project Name: {entry.name}</p>
+                                        <p className="mt-1">{entry.role}</p>
                                     </div>
-                                </div>
 
-                                <div>
-                                    <p className="font-semibold">Verwendete Technologien</p>
-                                    <div className="mt-1 space-y-1">
-                                        {entry.technologies.map((tech, i) => <p key={i}>{tech}</p>)}
+                                    <p>{entry.description}</p>
+                                    <p>Teamgröße: {entry.team_size}</p>
+
+                                    <div>
+                                        <p className="font-semibold">Meine Aufgaben umfassen dabei:</p>
+                                        <div className="mt-1 space-y-1">
+                                            {entry.tasks.map((task, i) => <p key={i}>{task}</p>)}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p className="font-semibold">Verwendete Technologien</p>
+                                        <div className="mt-1 space-y-1">
+                                            {entry.technologies.map((tech, i) => <p key={i}>{tech}</p>)}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    ))
+                ) : (
+                    <div className="text-center py-12 px-6 bg-surface-rise border border-border">
+                        <h3 className="text-lg font-semibold text-primary">Keine Projekte vorhanden</h3>
+                        <p className="mt-2 text-sm text-secondary">In dieser Kategorie wurden noch keine Einträge hinzugefügt.</p>
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );

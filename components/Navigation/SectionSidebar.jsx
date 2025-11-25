@@ -18,7 +18,7 @@ const sections = [
 
 export default function SectionSidebar() {
   const searchParams = useSearchParams();
-  const currentSection = searchParams.get('section') || 'education';
+  const currentSection = searchParams.get('section') || 'profile';
   const isEditing = searchParams.get('edit') === 'true';
 
   return (

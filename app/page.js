@@ -20,7 +20,7 @@ export default async function Home() {
             <h3 className="text-2xl font-semibold mb-3 font-zilla-slab">Wie es funktioniert:</h3>
             <ul className="list-disc list-outside pl-5 space-y-3 mb-6">
               <li>
-                Laden Sie das gewünschte Arbeiter:innen-Profil von Maps herunter und laden Sie es hier als .docx hoch. Klicken Sie auf "Weiter", wenn Sie bereit sind. Nach der Verarbeitung des Dokuments können Sie die einzelnen Abschnitte sehen und bearbeiten.
+                Laden Sie das gewünschte Arbeiter:innen-Profil von Maps herunter und laden Sie es hier als .json hoch. Sie werden dann automatisch weitergeleitet. Nach der Verarbeitung des Dokuments können Sie die einzelnen Abschnitte sehen und bearbeiten.
               </li>
               <li>
                 Änderungen werden automatisch im Hintergrund und lokal gespeichert, sodass Sie problemlos zwischen den Seiten wechseln können, ohne Ihre Anpassungen zu verlieren.
