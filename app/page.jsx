@@ -1,7 +1,9 @@
+"use client"
+
 import Header from "@/components/Navigation/Header"
 import FileUpload from "@/components/FileUpload";
 
-export default async function Home() {
+export default function Home() {
   return (
     <div className="flex flex-col h-screen text-primary">
       <Header activeStep={1} />
@@ -51,7 +53,6 @@ export default async function Home() {
           <div className="lg:w-2/5 w-full mt-10 lg:mt-0">
             <FileUpload />
           </div>
-
         </div>
       </main>
     </div>
