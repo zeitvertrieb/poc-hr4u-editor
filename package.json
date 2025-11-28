@@ -1,12 +1,13 @@
 {
-  "name": "hr4u_editor",
+  "name": "poc-hr4u-editor",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{js,jsx,json,css,md}\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
@@ -19,8 +20,10 @@
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
