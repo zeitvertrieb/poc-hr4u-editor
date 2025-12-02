@@ -37,22 +37,29 @@ export default function ClientContentPage({ currentSection, isEditing }) {
   }, []);
 
   useEffect(() => {
-    try {
-      const savedData = localStorage.getItem(STORAGE_KEY);
+    const loadData = async () => {
+      try {
+        const savedData = localStorage.getItem(STORAGE_KEY);
 
-      if (savedData) {
-        setContent(JSON.parse(savedData));
-      } else {
-        console.warn("No data in localStorage. Redirecting to upload.");
-        router.push('/');
+        if (savedData) {
+          setContent(JSON.parse(savedData));
+        } else {
+          console.warn("No data in localStorage. Loading test data from /test-json.json.");
+          const response = await fetch('/test-json.json');
+          const testData = await response.json();
+          setContent(testData);
+        }
+      } catch (err) {
+        console.error("Error loading data:", err);
+        localStorage.removeItem(STORAGE_KEY);
       }
-    } catch (err) {
-      console.error("Error loading data:", err);
-      localStorage.removeItem(STORAGE_KEY);
-      router.push('/');
+      setIsLoading(false);
+    };
+
+    if (hasMounted) {
+      loadData();
     }
-    setIsLoading(false);
-  }, [router, hasMounted]);
+  }, [hasMounted]);
   useEffect(() => {
     if (hasMounted && content && !isLoading) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
