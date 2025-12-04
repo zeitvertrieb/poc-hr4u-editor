@@ -1,9 +1,9 @@
-'use client'; 
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from "@/components/Navigation/Header"; 
-import PreviewDoc from "@/components/Preview/PreviewDoc"; 
+import Header from '@/components/Navigation/Header';
+import PreviewDoc from '@/components/Preview/PreviewDoc';
 import { STORAGE_KEY } from '@/lib/constants';
 
 export default function ClientPreviewPage() {
@@ -15,15 +15,15 @@ export default function ClientPreviewPage() {
   useEffect(() => {
     try {
       const savedData = localStorage.getItem(STORAGE_KEY);
-      
+
       if (savedData) {
         setContent(JSON.parse(savedData));
       } else {
-        console.warn("No data in localStorage. Redirecting to upload.");
+        console.warn('No data in localStorage. Redirecting to upload.');
         router.push('/');
       }
     } catch (err) {
-      console.error("Error loading data:", err);
+      console.error('Error loading data:', err);
       localStorage.removeItem(STORAGE_KEY);
       router.push('/');
     }
@@ -62,7 +62,7 @@ export default function ClientPreviewPage() {
         className="sticky top-0 z-10 "
       />
       <main className="flex-1 w-full flex justify-center overflow-y-auto">
-        <PreviewDoc data={content}/>
+        <PreviewDoc data={content} />
       </main>
     </div>
   );

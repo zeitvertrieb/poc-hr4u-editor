@@ -20,12 +20,14 @@ A Next.js application for editing and managing HR resumes and profiles.
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd hr4u_editor
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```

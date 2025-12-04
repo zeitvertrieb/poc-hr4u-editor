@@ -9,17 +9,17 @@ import {
   faTrash,
   faPlus,
   faCheck,
-  faTimes
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import NavLink from '../common/NavLink';
 import Label from '../common/Label';
 import EditorLayout from './EditorLayout';
 
 const newEntryDefaults = {
-  start: "",
-  end: "",
-  degree: "",
-  institution: ""
+  start: '',
+  end: '',
+  degree: '',
+  institution: '',
 };
 
 export default function EducationEditor({ data, onChange }) {
@@ -57,9 +57,9 @@ export default function EducationEditor({ data, onChange }) {
   };
 
   const handleItemSelect = (index) => {
-    setSelectedIndices(prev => {
+    setSelectedIndices((prev) => {
       if (prev.includes(index)) {
-        return prev.filter(i => i !== index);
+        return prev.filter((i) => i !== index);
       } else {
         return [...prev, index];
       }
@@ -86,9 +86,9 @@ export default function EducationEditor({ data, onChange }) {
   };
 
   const handleTempEntryChange = (field, value) => {
-    setTempEntry(prev => ({ ...prev, [field]: value }));
+    setTempEntry((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: null }));
+      setErrors((prev) => ({ ...prev, [field]: null }));
     }
   };
 
@@ -98,14 +98,13 @@ export default function EducationEditor({ data, onChange }) {
     setErrors({});
   };
 
-
   const handleDelete = (indexToDelete) => {
     const newArray = data.filter((_, index) => index !== indexToDelete);
     onChange(newArray);
 
     const newSelectedIndices = selectedIndices
-      .filter(i => i !== indexToDelete)
-      .map(i => (i > indexToDelete ? i - 1 : i));
+      .filter((i) => i !== indexToDelete)
+      .map((i) => (i > indexToDelete ? i - 1 : i));
     setSelectedIndices(newSelectedIndices);
 
     if (indexToDelete === editIndex) {
@@ -119,8 +118,8 @@ export default function EducationEditor({ data, onChange }) {
 
     const newErrors = {};
 
-    if (!tempEntry.degree || tempEntry.degree.trim() === "") {
-      newErrors.degree = "Der Abschluss muss ausgefüllt werden.";
+    if (!tempEntry.degree || tempEntry.degree.trim() === '') {
+      newErrors.degree = 'Der Abschluss muss ausgefüllt werden.';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -133,7 +132,7 @@ export default function EducationEditor({ data, onChange }) {
     onChange(updatedData);
 
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
-      const isStillEmpty = Object.values(tempEntry).every(val => val === "");
+      const isStillEmpty = Object.values(tempEntry).every((val) => val === '');
       if (isStillEmpty) {
         handleDelete(editIndex);
         return;
@@ -165,8 +164,14 @@ export default function EducationEditor({ data, onChange }) {
       title="Ausbildung"
       navLinks={
         <>
-          <NavLink href="/content?section=profile&edit=true"><FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Profil</NavLink>
-          <NavLink href="/content?section=certifications&edit=true">Zertifikate<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" /></NavLink>
+          <NavLink href="/content?section=profile&edit=true">
+            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
+            Profil
+          </NavLink>
+          <NavLink href="/content?section=certifications&edit=true">
+            Zertifikate
+            <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
+          </NavLink>
         </>
       }
       itemCount={data.length}
@@ -179,7 +184,15 @@ export default function EducationEditor({ data, onChange }) {
       onDeleteSelected={handleDeleteSelected}
       isEditingItem={isEditingItem}
       selectAllCheckboxRef={selectAllCheckboxRef}
-      addNewButton={<button onClick={handleAddNew} className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"><FontAwesomeIcon icon={faPlus} className="h-3 w-3" />AUSBILDUNG HINZUFÜGEN</button>}
+      addNewButton={
+        <button
+          onClick={handleAddNew}
+          className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
+        >
+          <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
+          AUSBILDUNG HINZUFÜGEN
+        </button>
+      }
     >
       <div className="flex flex-col gap-4 mt-4" ref={listContainerRef}>
         {data.length > 0 ? (
@@ -191,7 +204,6 @@ export default function EducationEditor({ data, onChange }) {
                 key={index}
                 className={`flex items-center gap-4 p-4 bg-surface-rise border border-border`}
               >
-
                 {isThisRowEditing ? (
                   <div className="w-5 h-5 flex-shrink-0" />
                 ) : (
@@ -204,11 +216,9 @@ export default function EducationEditor({ data, onChange }) {
                   />
                 )}
                 <div className="flex-1 flex gap-6">
-
-                  <div className='flex-1'>
+                  <div className="flex-1">
                     {isThisRowEditing ? (
                       <div className="flex flex-col gap-2">
-
                         <div className="flex items-end gap-2">
                           <div className="flex-1">
                             <Label>Von</Label>
@@ -216,7 +226,9 @@ export default function EducationEditor({ data, onChange }) {
                               ref={editInputRef}
                               type="text"
                               value={tempEntry?.start || ''}
-                              onChange={(e) => handleTempEntryChange('start', e.target.value)}
+                              onChange={(e) =>
+                                handleTempEntryChange('start', e.target.value)
+                              }
                               className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                               placeholder="z.B. Sep. 2025"
                             />
@@ -227,31 +239,38 @@ export default function EducationEditor({ data, onChange }) {
                             <input
                               type="text"
                               value={tempEntry?.end || ''}
-                              onChange={(e) => handleTempEntryChange('end', e.target.value)}
+                              onChange={(e) =>
+                                handleTempEntryChange('end', e.target.value)
+                              }
                               className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                               placeholder="z.B. Juni 2025"
                             />
                           </div>
                         </div>
-                        <p className='text-xs'>Format: Mon. YYYY (z.B. Jän. 2025)</p>
+                        <p className="text-xs">
+                          Format: Mon. YYYY (z.B. Jän. 2025)
+                        </p>
                       </div>
                     ) : (
                       <>
                         <Label>Zeitraum</Label>
-                        <p className="mt-1 w-max">{entry.start} - {entry.end}</p>
+                        <p className="mt-1 w-max">
+                          {entry.start} - {entry.end}
+                        </p>
                       </>
                     )}
                   </div>
 
-
-                  <div className='flex-1'>
+                  <div className="flex-1">
                     <Label>Abschluss</Label>
                     {isThisRowEditing ? (
                       <>
                         <input
                           type="text"
                           value={tempEntry?.degree || ''}
-                          onChange={e => handleTempEntryChange('degree', e.target.value)}
+                          onChange={(e) =>
+                            handleTempEntryChange('degree', e.target.value)
+                          }
                           className={`mt-1 w-full p-1 bg-surface-rise border-b  focus:outline-none ${
                             errors.degree
                               ? 'border-interactive-critical'
@@ -259,20 +278,26 @@ export default function EducationEditor({ data, onChange }) {
                           }`}
                           placeholder="z.B. Master"
                         />
-                        {errors.degree && <p className="text-xs text-interactive-critical mt-1">{errors.degree}</p>}
+                        {errors.degree && (
+                          <p className="text-xs text-interactive-critical mt-1">
+                            {errors.degree}
+                          </p>
+                        )}
                       </>
                     ) : (
                       <p className="mt-1">{entry.degree}</p>
                     )}
                   </div>
 
-                  <div className='flex-1'>
+                  <div className="flex-1">
                     <Label>Institution</Label>
                     {isThisRowEditing ? (
                       <input
                         type="text"
                         value={tempEntry?.institution || ''}
-                        onChange={(e) => handleTempEntryChange('institution', e.target.value)}
+                        onChange={(e) =>
+                          handleTempEntryChange('institution', e.target.value)
+                        }
                         className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
                         placeholder="z.B. FH Technikum"
                       />
@@ -307,7 +332,10 @@ export default function EducationEditor({ data, onChange }) {
                         className="text-interactive hover:text-interactive-hover"
                         title="Bearbeiten"
                       >
-                        <FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" />
+                        <FontAwesomeIcon
+                          icon={faPencilAlt}
+                          className="h-4 w-4"
+                        />
                       </button>
                       <button
                         onClick={() => handleDelete(index)}
@@ -324,8 +352,12 @@ export default function EducationEditor({ data, onChange }) {
           })
         ) : (
           <div className="text-center py-12 px-6 bg-surface-rise border border-border">
-            <h3 className="text-lg font-semibold text-primary">Keine Ausbildungen vorhanden</h3>
-            <p className="mt-2 text-sm text-secondary">Fügen Sie Ihre erste Ausbildung hinzu, um zu beginnen.</p>
+            <h3 className="text-lg font-semibold text-primary">
+              Keine Ausbildungen vorhanden
+            </h3>
+            <p className="mt-2 text-sm text-secondary">
+              Fügen Sie Ihre erste Ausbildung hinzu, um zu beginnen.
+            </p>
             <button
               onClick={handleAddNew}
               className="mt-4 flex items-center gap-2 mx-auto py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
@@ -336,7 +368,6 @@ export default function EducationEditor({ data, onChange }) {
           </div>
         )}
       </div>
-
     </EditorLayout>
   );
 }

@@ -9,12 +9,12 @@ import {
   faTrash,
   faPlus,
   faCheck,
-  faTimes
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import EditorLayout from './EditorLayout';
 import NavLink from '../common/NavLink';
 
-const newEntryDefault = "";
+const newEntryDefault = '';
 
 export default function CertificateEditor({ data, onChange }) {
   const [editIndex, setEditIndex] = useState(null);
@@ -50,9 +50,9 @@ export default function CertificateEditor({ data, onChange }) {
   };
 
   const handleItemSelect = (index) => {
-    setSelectedIndices(prev => {
+    setSelectedIndices((prev) => {
       if (prev.includes(index)) {
-        return prev.filter(i => i !== index);
+        return prev.filter((i) => i !== index);
       } else {
         return [...prev, index];
       }
@@ -85,15 +85,15 @@ export default function CertificateEditor({ data, onChange }) {
   const startEditing = (index) => {
     setEditIndex(index);
     setTempEntry(data[index]);
-  }
+  };
 
   const handleDelete = (indexToDelete) => {
     const newArray = data.filter((_, index) => index !== indexToDelete);
     onChange(newArray);
 
     const newSelectedIndices = selectedIndices
-      .filter(i => i !== indexToDelete)
-      .map(i => (i > indexToDelete ? i - 1 : i));
+      .filter((i) => i !== indexToDelete)
+      .map((i) => (i > indexToDelete ? i - 1 : i));
     setSelectedIndices(newSelectedIndices);
 
     if (indexToDelete === editIndex) {
@@ -104,7 +104,11 @@ export default function CertificateEditor({ data, onChange }) {
 
   const handleSave = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
-      if (!tempEntry || tempEntry.trim() === "" || tempEntry === newEntryDefault) {
+      if (
+        !tempEntry ||
+        tempEntry.trim() === '' ||
+        tempEntry === newEntryDefault
+      ) {
         handleDelete(editIndex);
         return;
       }
@@ -135,8 +139,14 @@ export default function CertificateEditor({ data, onChange }) {
       title="Zertifikate"
       navLinks={
         <>
-          <NavLink href="/content?section=education&edit=true"><FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Ausbildung</NavLink>
-          <NavLink href="/content?section=professional_focus&edit=true">Fachliche Schwerpunkte<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" /></NavLink>
+          <NavLink href="/content?section=education&edit=true">
+            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
+            Ausbildung
+          </NavLink>
+          <NavLink href="/content?section=professional_focus&edit=true">
+            Fachliche Schwerpunkte
+            <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
+          </NavLink>
         </>
       }
       itemCount={data.length}
@@ -149,7 +159,16 @@ export default function CertificateEditor({ data, onChange }) {
       onDeleteSelected={handleDeleteSelected}
       isEditingItem={isEditingItem}
       selectAllCheckboxRef={selectAllCheckboxRef}
-      addNewButton={<button onClick={handleAddNew} className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover" disabled={isEditingItem}><FontAwesomeIcon icon={faPlus} className="h-3 w-3" />ZERTIFIKAT HINZUFÜGEN</button>}
+      addNewButton={
+        <button
+          onClick={handleAddNew}
+          className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
+          disabled={isEditingItem}
+        >
+          <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
+          ZERTIFIKAT HINZUFÜGEN
+        </button>
+      }
     >
       <div className="space-y-4 mt-4" ref={listContainerRef}>
         {data.length > 0 ? (
@@ -159,10 +178,12 @@ export default function CertificateEditor({ data, onChange }) {
             return (
               <div
                 key={index}
-                className={`flex items-center gap-4 p-4 bg-surface-rise border ${isThisRowEditing ? 'border-primary shadow-md' : 'border-border'
-                  }`}
+                className={`flex items-center gap-4 p-4 bg-surface-rise border ${
+                  isThisRowEditing
+                    ? 'border-primary shadow-md'
+                    : 'border-border'
+                }`}
               >
-
                 {isThisRowEditing ? (
                   <div className="w-5 h-5 flex-shrink-0" />
                 ) : (
@@ -178,7 +199,7 @@ export default function CertificateEditor({ data, onChange }) {
                 <div className="flex-1">
                   {isThisRowEditing ? (
                     <>
-                      <label className='sr-only'>Zertifikat</label>
+                      <label className="sr-only">Zertifikat</label>
                       <input
                         ref={editInputRef}
                         type="text"
@@ -188,7 +209,6 @@ export default function CertificateEditor({ data, onChange }) {
                         placeholder="z.B. IREB CPRE Foundation Level"
                       />
                     </>
-
                   ) : (
                     <p className="mt-1">{certificate}</p>
                   )}
@@ -220,7 +240,10 @@ export default function CertificateEditor({ data, onChange }) {
                         title="Bearbeiten"
                         disabled={isEditingItem}
                       >
-                        <FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" />
+                        <FontAwesomeIcon
+                          icon={faPencilAlt}
+                          className="h-4 w-4"
+                        />
                       </button>
                       <button
                         onClick={() => handleDelete(index)}
@@ -238,8 +261,12 @@ export default function CertificateEditor({ data, onChange }) {
           })
         ) : (
           <div className="text-center py-12 px-6 bg-surface-rise border border-border">
-            <h3 className="text-lg font-semibold text-primary">Keine Zertifikate vorhanden</h3>
-            <p className="mt-2 text-sm text-secondary">Fügen Sie Ihr erstes Zertifikat hinzu, um zu beginnen.</p>
+            <h3 className="text-lg font-semibold text-primary">
+              Keine Zertifikate vorhanden
+            </h3>
+            <p className="mt-2 text-sm text-secondary">
+              Fügen Sie Ihr erstes Zertifikat hinzu, um zu beginnen.
+            </p>
             <button
               onClick={handleAddNew}
               className="mt-4 flex items-center gap-2 mx-auto py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
@@ -250,7 +277,6 @@ export default function CertificateEditor({ data, onChange }) {
           </div>
         )}
       </div>
-
     </EditorLayout>
   );
 }

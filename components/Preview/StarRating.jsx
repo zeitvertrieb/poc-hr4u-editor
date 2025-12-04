@@ -30,8 +30,8 @@ const OutlinedStar = () => (
   </svg>
 );
 
-export default function StarRating({rating}) {
-    return (
+export default function StarRating({ rating }) {
+  return (
     <div
       className={`flex items-center space-x-1 text-primary`}
       aria-label={`Rating: ${rating} out of 5 stars`}

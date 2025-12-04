@@ -10,15 +10,15 @@ import {
   faPlus,
   faCheck,
   faTimes,
-  faChevronLeft
+  faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import StarRating from '../Preview/StarRating';
 import StarRatingInput from '../StarRatingInput';
 import NavLink from '../common/NavLink';
 import Label from '../common/Label';
 
-const ratingMap = { "five": 5, "four": 4, "three": 3, "two": 2, "one": 1 };
-const ratingKeyMap = { 5: "five", 4: "four", 3: "three", 2: "two", 1: "one" };
+const ratingMap = { five: 5, four: 4, three: 3, two: 2, one: 1 };
+const ratingKeyMap = { 5: 'five', 4: 'four', 3: 'three', 2: 'two', 1: 'one' };
 
 function transformSkills(subCategory) {
   const skills = [];
@@ -36,20 +36,24 @@ function transformSkills(subCategory) {
   return skills;
 }
 
-const newCategoryDefault = { category: "", subcategories: [] };
-const newSubCategoryDefault = { name: "", ratings: [] };
-const newSkillDefault = { name: "", rating: 1 };
+const newCategoryDefault = { category: '', subcategories: [] };
+const newSubCategoryDefault = { name: '', ratings: [] };
+const newSkillDefault = { name: '', rating: 1 };
 
 export default function SkillsEditor({ data, onChange }) {
-  const [openCategories, setOpenCategories] = useState(new Set(data.map((_, i) => i)));
+  const [openCategories, setOpenCategories] = useState(
+    new Set(data.map((_, i) => i))
+  );
   const [openSubcategories, setOpenSubcategories] = useState(
-    new Set(data.flatMap((cat, ci) => cat.subcategories.map((_, si) => `${ci}-${si}`)))
+    new Set(
+      data.flatMap((cat, ci) => cat.subcategories.map((_, si) => `${ci}-${si}`))
+    )
   );
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [isAllOpen, setIsAllOpen] = useState(true);
 
   const [editItem, setEditItem] = useState(null);
-  const [tempEditValue, setTempEditValue] = useState({ name: "", rating: 0 });
+  const [tempEditValue, setTempEditValue] = useState({ name: '', rating: 0 });
 
   const selectAllCheckboxRef = useRef(null);
   const editInputRef = useRef(null);
@@ -76,11 +80,19 @@ export default function SkillsEditor({ data, onChange }) {
           const skillId = `skill-${ci}-${si}-${ski}`;
           allSkillIds.push(skillId);
           subCatSkillIds.push(skillId);
-          ids.skills[skillId] = { parent: subCatId, catIndex: ci, subIndex: si, skill: skill };
+          ids.skills[skillId] = {
+            parent: subCatId,
+            catIndex: ci,
+            subIndex: si,
+            skill: skill,
+          };
         });
 
         subCatIds.push(subCatId);
-        ids.subcategories[subCatId] = { parent: catId, children: subCatSkillIds };
+        ids.subcategories[subCatId] = {
+          parent: catId,
+          children: subCatSkillIds,
+        };
         skillIds.push(...subCatSkillIds);
         totalSkills += subCatSkillIds.length;
       });
@@ -96,7 +108,10 @@ export default function SkillsEditor({ data, onChange }) {
 
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
-      const allItemsCount = allItemIds.allCatIds.length + allItemIds.allSubCatIds.length + allItemIds.allSkillIds.length;
+      const allItemsCount =
+        allItemIds.allCatIds.length +
+        allItemIds.allSubCatIds.length +
+        allItemIds.allSkillIds.length;
       const selectedCount = selectedItems.size;
 
       if (selectedCount > 0 && selectedCount < allItemsCount) {
@@ -120,19 +135,25 @@ export default function SkillsEditor({ data, onChange }) {
       setIsAllOpen(false);
     } else {
       setOpenCategories(new Set(data.map((_, i) => i)));
-      setOpenSubcategories(new Set(data.flatMap((cat, ci) => cat.subcategories.map((_, si) => `${ci}-${si}`))));
+      setOpenSubcategories(
+        new Set(
+          data.flatMap((cat, ci) =>
+            cat.subcategories.map((_, si) => `${ci}-${si}`)
+          )
+        )
+      );
       setIsAllOpen(true);
     }
   };
   const toggleCategory = (catIndex) => {
-    setOpenCategories(prev => {
+    setOpenCategories((prev) => {
       const next = new Set(prev);
       next.has(catIndex) ? next.delete(catIndex) : next.add(catIndex);
       return next;
     });
   };
   const toggleSubcategory = (id) => {
-    setOpenSubcategories(prev => {
+    setOpenSubcategories((prev) => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
@@ -143,7 +164,13 @@ export default function SkillsEditor({ data, onChange }) {
     if (selectedItems.size > 0) {
       setSelectedItems(new Set());
     } else {
-      setSelectedItems(new Set([...allItemIds.allSkillIds, ...allItemIds.allSubCatIds, ...allItemIds.allCatIds]));
+      setSelectedItems(
+        new Set([
+          ...allItemIds.allSkillIds,
+          ...allItemIds.allSubCatIds,
+          ...allItemIds.allCatIds,
+        ])
+      );
     }
   };
 
@@ -153,7 +180,10 @@ export default function SkillsEditor({ data, onChange }) {
     let children = [];
 
     if (type === 'category' && allItemIds.categories[id]) {
-      children = [...allItemIds.categories[id].children, ...allItemIds.categories[id].grandchildren];
+      children = [
+        ...allItemIds.categories[id].children,
+        ...allItemIds.categories[id].grandchildren,
+      ];
     }
     if (type === 'subcategory' && allItemIds.subcategories[id]) {
       children = [...allItemIds.subcategories[id].children];
@@ -161,10 +191,10 @@ export default function SkillsEditor({ data, onChange }) {
 
     if (isSelected) {
       newSelection.delete(id);
-      children.forEach(childId => newSelection.delete(childId));
+      children.forEach((childId) => newSelection.delete(childId));
     } else {
       newSelection.add(id);
-      children.forEach(childId => newSelection.add(childId));
+      children.forEach((childId) => newSelection.add(childId));
     }
 
     setSelectedItems(newSelection);
@@ -172,7 +202,6 @@ export default function SkillsEditor({ data, onChange }) {
 
   const selectedCount = selectedItems.size;
   const handleDeselectAll = () => setSelectedItems(new Set());
-
 
   const handleAdd = (type, catIndex, subIndex) => {
     let newData = [...data];
@@ -191,7 +220,7 @@ export default function SkillsEditor({ data, onChange }) {
         if (ci !== catIndex) return cat;
         return {
           ...cat,
-          subcategories: [newSubCat, ...cat.subcategories]
+          subcategories: [newSubCat, ...cat.subcategories],
         };
       });
       onChange(newData);
@@ -214,7 +243,10 @@ export default function SkillsEditor({ data, onChange }) {
             let found = false;
             for (let i = 0; i < newRatings.length; i++) {
               if (newRatings[i][ratingKey]) {
-                newRatings[i] = { ...newRatings[i], [ratingKey]: [newSkillName, ...newRatings[i][ratingKey]] };
+                newRatings[i] = {
+                  ...newRatings[i],
+                  [ratingKey]: [newSkillName, ...newRatings[i][ratingKey]],
+                };
                 found = true;
                 break;
               }
@@ -223,12 +255,18 @@ export default function SkillsEditor({ data, onChange }) {
               newRatings.unshift({ [ratingKey]: [newSkillName] });
             }
             return { ...subCat, ratings: newRatings };
-          })
+          }),
         };
       });
 
       onChange(newData);
-      setEditItem({ type: 'skill', catIndex, subIndex, skillName: newSkillName, oldRating: newSkillRating });
+      setEditItem({
+        type: 'skill',
+        catIndex,
+        subIndex,
+        skillName: newSkillName,
+        oldRating: newSkillRating,
+      });
       setTempEditValue({ name: newSkillName, rating: newSkillRating });
     }
   };
@@ -240,26 +278,36 @@ export default function SkillsEditor({ data, onChange }) {
     if (type === 'category') {
       const catId = `cat-${catIndex}`;
       newSelection.delete(catId);
-      allItemIds.categories[catId]?.children.forEach(id => newSelection.delete(id));
-      allItemIds.categories[catId]?.grandchildren.forEach(id => newSelection.delete(id));
+      allItemIds.categories[catId]?.children.forEach((id) =>
+        newSelection.delete(id)
+      );
+      allItemIds.categories[catId]?.grandchildren.forEach((id) =>
+        newSelection.delete(id)
+      );
       newData = data.filter((_, i) => i !== catIndex);
     }
     if (type === 'subcategory') {
       const subCatId = `subcat-${catIndex}-${subIndex}`;
       newSelection.delete(subCatId);
-      allItemIds.subcategories[subCatId]?.children.forEach(id => newSelection.delete(id));
+      allItemIds.subcategories[subCatId]?.children.forEach((id) =>
+        newSelection.delete(id)
+      );
 
       newData = data.map((cat, ci) => {
         if (ci !== catIndex) return cat;
         return {
           ...cat,
-          subcategories: cat.subcategories.filter((_, i) => i !== subIndex)
+          subcategories: cat.subcategories.filter((_, i) => i !== subIndex),
         };
       });
     }
     if (type === 'skill') {
-      const transformedSkills = transformSkills(data[catIndex].subcategories[subIndex]);
-      const skillIndex = transformedSkills.findIndex(s => s.name === skill.name && s.rating === skill.rating);
+      const transformedSkills = transformSkills(
+        data[catIndex].subcategories[subIndex]
+      );
+      const skillIndex = transformedSkills.findIndex(
+        (s) => s.name === skill.name && s.rating === skill.rating
+      );
       if (skillIndex !== -1) {
         const skillId = `skill-${catIndex}-${subIndex}-${skillIndex}`;
         newSelection.delete(skillId);
@@ -272,17 +320,21 @@ export default function SkillsEditor({ data, onChange }) {
           subcategories: cat.subcategories.map((subCat, si) => {
             if (si !== subIndex) return subCat;
             const ratingKey = ratingKeyMap[skill.rating];
-            const newRatings = subCat.ratings.map(ratingObj => {
-              if (!ratingObj[ratingKey]) return ratingObj;
-              const newSkillList = ratingObj[ratingKey].filter(s => s !== skill.name);
-              if (newSkillList.length === 0) {
-                const { [ratingKey]: _, ...rest } = ratingObj;
-                return rest;
-              }
-              return { ...ratingObj, [ratingKey]: newSkillList };
-            }).filter(r => Object.keys(r).length > 0);
+            const newRatings = subCat.ratings
+              .map((ratingObj) => {
+                if (!ratingObj[ratingKey]) return ratingObj;
+                const newSkillList = ratingObj[ratingKey].filter(
+                  (s) => s !== skill.name
+                );
+                if (newSkillList.length === 0) {
+                  const { [ratingKey]: _, ...rest } = ratingObj;
+                  return rest;
+                }
+                return { ...ratingObj, [ratingKey]: newSkillList };
+              })
+              .filter((r) => Object.keys(r).length > 0);
             return { ...subCat, ratings: newRatings };
-          })
+          }),
         };
       });
     }
@@ -299,7 +351,7 @@ export default function SkillsEditor({ data, onChange }) {
     const subCatsToDelete = new Map();
     const skillsToDelete = new Map();
 
-    selectedItems.forEach(id => {
+    selectedItems.forEach((id) => {
       if (id.startsWith('cat-')) catsToDelete.add(parseInt(id.split('-')[1]));
       if (id.startsWith('subcat-')) {
         const [, ci, si] = id.split('-').map(Number);
@@ -317,26 +369,35 @@ export default function SkillsEditor({ data, onChange }) {
       }
     });
 
-    newData = newData.map((cat, ci) => {
-      if (catsToDelete.has(ci)) return null;
-      cat.subcategories = cat.subcategories.map((subCat, si) => {
-        if (subCatsToDelete.get(ci)?.has(si)) return null;
-        const skillSetToRemove = skillsToDelete.get(`${ci}-${si}`);
-        if (skillSetToRemove) {
-          skillSetToRemove.forEach(skill => {
-            const ratingKey = ratingKeyMap[skill.rating];
-            let ratingObj = subCat.ratings.find(r => r[ratingKey]);
-            if (ratingObj) {
-              ratingObj[ratingKey] = ratingObj[ratingKey].filter(s => s !== skill.name);
-              if (ratingObj[ratingKey].length === 0) delete ratingObj[ratingKey];
-              subCat.ratings = subCat.ratings.filter(r => Object.keys(r).length > 0);
+    newData = newData
+      .map((cat, ci) => {
+        if (catsToDelete.has(ci)) return null;
+        cat.subcategories = cat.subcategories
+          .map((subCat, si) => {
+            if (subCatsToDelete.get(ci)?.has(si)) return null;
+            const skillSetToRemove = skillsToDelete.get(`${ci}-${si}`);
+            if (skillSetToRemove) {
+              skillSetToRemove.forEach((skill) => {
+                const ratingKey = ratingKeyMap[skill.rating];
+                let ratingObj = subCat.ratings.find((r) => r[ratingKey]);
+                if (ratingObj) {
+                  ratingObj[ratingKey] = ratingObj[ratingKey].filter(
+                    (s) => s !== skill.name
+                  );
+                  if (ratingObj[ratingKey].length === 0)
+                    delete ratingObj[ratingKey];
+                  subCat.ratings = subCat.ratings.filter(
+                    (r) => Object.keys(r).length > 0
+                  );
+                }
+              });
             }
-          });
-        }
-        return subCat;
-      }).filter(Boolean);
-      return cat;
-    }).filter(Boolean);
+            return subCat;
+          })
+          .filter(Boolean);
+        return cat;
+      })
+      .filter(Boolean);
 
     onChange(newData);
     setSelectedItems(new Set());
@@ -344,19 +405,38 @@ export default function SkillsEditor({ data, onChange }) {
   };
 
   const handleEditClick = (skill, catIndex, subIndex) => {
-    setEditItem({ type: 'skill', catIndex, subIndex, skillName: skill.name, oldRating: skill.rating });
+    setEditItem({
+      type: 'skill',
+      catIndex,
+      subIndex,
+      skillName: skill.name,
+      oldRating: skill.rating,
+    });
     setTempEditValue({ name: skill.name, rating: skill.rating });
   };
 
   const handleCancel = () => {
-    if (editItem?.type === 'category' && data[editItem.catIndex]?.category === newCategoryDefault.category) {
+    if (
+      editItem?.type === 'category' &&
+      data[editItem.catIndex]?.category === newCategoryDefault.category
+    ) {
       handleDelete('category', editItem.catIndex);
     }
-    if (editItem?.type === 'subcategory' && data[editItem.catIndex]?.subcategories[editItem.subIndex]?.name === newSubCategoryDefault.name) {
+    if (
+      editItem?.type === 'subcategory' &&
+      data[editItem.catIndex]?.subcategories[editItem.subIndex]?.name ===
+        newSubCategoryDefault.name
+    ) {
       handleDelete('subcategory', editItem.catIndex, editItem.subIndex);
     }
-    if (editItem?.type === 'skill' && editItem.skillName === newSkillDefault.name) {
-      handleDelete('skill', editItem.catIndex, editItem.subIndex, { name: newSkillDefault.name, rating: 1 });
+    if (
+      editItem?.type === 'skill' &&
+      editItem.skillName === newSkillDefault.name
+    ) {
+      handleDelete('skill', editItem.catIndex, editItem.subIndex, {
+        name: newSkillDefault.name,
+        rating: 1,
+      });
     }
     setEditItem(null);
   };
@@ -367,7 +447,10 @@ export default function SkillsEditor({ data, onChange }) {
     const { type, catIndex, subIndex, skillName, oldRating } = editItem;
 
     if (type === 'category') {
-      if (!tempEditValue.name || (tempEditValue.name === newCategoryDefault.category && data.length > 1)) {
+      if (
+        !tempEditValue.name ||
+        (tempEditValue.name === newCategoryDefault.category && data.length > 1)
+      ) {
         handleDelete('category', catIndex);
       } else {
         newData[catIndex].category = tempEditValue.name;
@@ -375,7 +458,11 @@ export default function SkillsEditor({ data, onChange }) {
       }
     }
     if (type === 'subcategory') {
-      if (!tempEditValue.name || (tempEditValue.name === newSubCategoryDefault.name && data[catIndex].subcategories.length > 1)) {
+      if (
+        !tempEditValue.name ||
+        (tempEditValue.name === newSubCategoryDefault.name &&
+          data[catIndex].subcategories.length > 1)
+      ) {
         handleDelete('subcategory', catIndex, subIndex);
       } else {
         newData[catIndex].subcategories[subIndex].name = tempEditValue.name;
@@ -385,23 +472,31 @@ export default function SkillsEditor({ data, onChange }) {
     if (type === 'skill') {
       const { name: newName, rating: newRating } = tempEditValue;
       if (!newName || (newName === newSkillDefault.name && oldRating === 1)) {
-        handleDelete('skill', catIndex, subIndex, { name: skillName, rating: oldRating });
+        handleDelete('skill', catIndex, subIndex, {
+          name: skillName,
+          rating: oldRating,
+        });
       } else {
         const subCat = newData[catIndex].subcategories[subIndex];
         const oldRatingKey = ratingKeyMap[oldRating];
-        let oldRatingObj = subCat.ratings.find(r => r[oldRatingKey]);
+        let oldRatingObj = subCat.ratings.find((r) => r[oldRatingKey]);
         if (oldRatingObj) {
-          oldRatingObj[oldRatingKey] = oldRatingObj[oldRatingKey].filter(s => s !== skillName);
-          if (oldRatingObj[oldRatingKey].length === 0) delete oldRatingObj[oldRatingKey];
+          oldRatingObj[oldRatingKey] = oldRatingObj[oldRatingKey].filter(
+            (s) => s !== skillName
+          );
+          if (oldRatingObj[oldRatingKey].length === 0)
+            delete oldRatingObj[oldRatingKey];
         }
         const newRatingKey = ratingKeyMap[newRating];
-        let newRatingObj = subCat.ratings.find(r => r[newRatingKey]);
+        let newRatingObj = subCat.ratings.find((r) => r[newRatingKey]);
         if (newRatingObj) {
           newRatingObj[newRatingKey].push(newName);
         } else {
           subCat.ratings.push({ [newRatingKey]: [newName] });
         }
-        subCat.ratings = subCat.ratings.filter(r => Object.keys(r).length > 0);
+        subCat.ratings = subCat.ratings.filter(
+          (r) => Object.keys(r).length > 0
+        );
         onChange(newData);
       }
     }
@@ -432,14 +527,21 @@ export default function SkillsEditor({ data, onChange }) {
           type="checkbox"
           className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
           ref={selectAllCheckboxRef}
-          checked={isSelectionActive && selectedItems.size === (allItemIds.allCatIds.length + allItemIds.allSubCatIds.length + allItemIds.allSkillIds.length)}
+          checked={
+            isSelectionActive &&
+            selectedItems.size ===
+              allItemIds.allCatIds.length +
+                allItemIds.allSubCatIds.length +
+                allItemIds.allSkillIds.length
+          }
           onChange={handleSelectAll}
           disabled={isEditingItem}
         />
         {isSelectionActive ? (
           <>
             <span className="text-sm font-bold">
-              {selectedCount} {selectedCount === 1 ? 'ELEMENT' : 'ELEMENTE'} AUSGEWÄHLT
+              {selectedCount} {selectedCount === 1 ? 'ELEMENT' : 'ELEMENTE'}{' '}
+              AUSGEWÄHLT
             </span>
             <button
               onClick={handleDeselectAll}
@@ -456,7 +558,8 @@ export default function SkillsEditor({ data, onChange }) {
           </>
         ) : (
           <span className="text-sm font-bold uppercase">
-            {allItemIds.totalSkillCount} {allItemIds.totalSkillCount === 1 ? 'ELEMENT' : 'ELEMENTE'}
+            {allItemIds.totalSkillCount}{' '}
+            {allItemIds.totalSkillCount === 1 ? 'ELEMENT' : 'ELEMENTE'}
           </span>
         )}
         <button
@@ -473,141 +576,361 @@ export default function SkillsEditor({ data, onChange }) {
             const catId = `cat-${catIndex}`;
             const isCatOpen = openCategories.has(catIndex);
             const isCatSelected = selectedItems.has(catId);
-            const isThisCatEditing = editItem?.type === 'category' && editItem.catIndex === catIndex;
+            const isThisCatEditing =
+              editItem?.type === 'category' && editItem.catIndex === catIndex;
 
             return (
-              <div key={catId} className="border-b border-border last:border-b-0">
+              <div
+                key={catId}
+                className="border-b border-border last:border-b-0"
+              >
                 <div className={`flex items-center gap-4 p-4 bg-[#CDBEDF]`}>
                   {isThisCatEditing ? (
                     <div className="w-5 h-5 flex-shrink-0" />
                   ) : (
-                    <input type="checkbox" className="h-5 w-5 text-interactive border-interactive focus:ring-interactive" checked={isCatSelected} onChange={() => toggleSelection(catId, 'category')} disabled={isEditingItem} />
+                    <input
+                      type="checkbox"
+                      className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
+                      checked={isCatSelected}
+                      onChange={() => toggleSelection(catId, 'category')}
+                      disabled={isEditingItem}
+                    />
                   )}
-                  <button onClick={() => toggleCategory(catIndex)} className="w-4" disabled={isThisCatEditing}>
-                    <FontAwesomeIcon icon={isCatOpen ? faChevronDown : faChevronRight} />
+                  <button
+                    onClick={() => toggleCategory(catIndex)}
+                    className="w-4"
+                    disabled={isThisCatEditing}
+                  >
+                    <FontAwesomeIcon
+                      icon={isCatOpen ? faChevronDown : faChevronRight}
+                    />
                   </button>
 
                   {isThisCatEditing ? (
-                    <input ref={editInputRef} type="text" placeholder='z.B. IT-Skills' value={tempEditValue.name} onChange={(e) => setTempEditValue({ name: e.target.value })} className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
+                    <input
+                      ref={editInputRef}
+                      type="text"
+                      placeholder="z.B. IT-Skills"
+                      value={tempEditValue.name}
+                      onChange={(e) =>
+                        setTempEditValue({ name: e.target.value })
+                      }
+                      className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
+                    />
                   ) : (
-                    <span className="flex-1 font-bold uppercase">{category.category}</span>
+                    <span className="flex-1 font-bold uppercase">
+                      {category.category}
+                    </span>
                   )}
 
                   {isThisCatEditing ? (
                     <div className="flex gap-4 w-16 justify-end">
-                      <button onClick={handleSave} className="text-interactive hover:text-interactive-hover" title="Speichern"><FontAwesomeIcon icon={faCheck} className="h-4 w-4" /></button>
-                      <button onClick={handleCancel} className="text-interactive hover:text-interactive-hover" title="Abbrechen"><FontAwesomeIcon icon={faTimes} className="h-4 w-4" /></button>
+                      <button
+                        onClick={handleSave}
+                        className="text-interactive hover:text-interactive-hover"
+                        title="Speichern"
+                      >
+                        <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="text-interactive hover:text-interactive-hover"
+                        title="Abbrechen"
+                      >
+                        <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+                      </button>
                     </div>
                   ) : (
                     <div className="flex gap-4">
-                      <button onClick={() => handleAdd('subcategory', catIndex)} className="flex items-center justify-center text-interactive bg-surface-rise hover:text-interactive-hover hover:border-interactive-hover border border-interactive" disabled={isEditingItem}><FontAwesomeIcon icon={faPlus} className="py-1.5 px-1" /></button>
-                      <button onClick={() => handleDelete('category', catIndex)} className="text-interactive-critical hover:text-interactive-critical-hover" disabled={isEditingItem}><FontAwesomeIcon icon={faTrash} /></button>
+                      <button
+                        onClick={() => handleAdd('subcategory', catIndex)}
+                        className="flex items-center justify-center text-interactive bg-surface-rise hover:text-interactive-hover hover:border-interactive-hover border border-interactive"
+                        disabled={isEditingItem}
+                      >
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          className="py-1.5 px-1"
+                        />
+                      </button>
+                      <button
+                        onClick={() => handleDelete('category', catIndex)}
+                        className="text-interactive-critical hover:text-interactive-critical-hover"
+                        disabled={isEditingItem}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
                     </div>
                   )}
                 </div>
 
-                {isCatOpen && category.subcategories.map((subCat, subIndex) => {
-                  const subCatId = `subcat-${catIndex}-${subIndex}`;
-                  const isSubCatOpen = openSubcategories.has(`${catIndex}-${subIndex}`);
-                  const isSubCatSelected = selectedItems.has(subCatId);
-                  const skills = transformSkills(subCat);
-                  const isThisSubCatEditing = editItem?.type === 'subcategory' && editItem.catIndex === catIndex && editItem.subIndex === subIndex;
+                {isCatOpen &&
+                  category.subcategories.map((subCat, subIndex) => {
+                    const subCatId = `subcat-${catIndex}-${subIndex}`;
+                    const isSubCatOpen = openSubcategories.has(
+                      `${catIndex}-${subIndex}`
+                    );
+                    const isSubCatSelected = selectedItems.has(subCatId);
+                    const skills = transformSkills(subCat);
+                    const isThisSubCatEditing =
+                      editItem?.type === 'subcategory' &&
+                      editItem.catIndex === catIndex &&
+                      editItem.subIndex === subIndex;
 
-                  return (
-                    <div key={subCatId} className="border-t border-border">
-                      <div className={`flex items-center gap-4 p-4 bg-[#E2E0EF]`}>
-                        {isThisSubCatEditing ? (
-                          <div className="w-5 h-5 flex-shrink-0" />
-                        ) : (
-                          <input type="checkbox" className="h-5 w-5 text-interactive border-interactive focus:ring-interactive" checked={isSubCatSelected} onChange={() => toggleSelection(subCatId, 'subcategory')} disabled={isEditingItem} />
-                        )}
-                        <button onClick={() => toggleSubcategory(`${catIndex}-${subIndex}`)} className="w-4" disabled={isThisSubCatEditing}>
-                          <FontAwesomeIcon icon={isSubCatOpen ? faChevronDown : faChevronRight} />
-                        </button>
+                    return (
+                      <div key={subCatId} className="border-t border-border">
+                        <div
+                          className={`flex items-center gap-4 p-4 bg-[#E2E0EF]`}
+                        >
+                          {isThisSubCatEditing ? (
+                            <div className="w-5 h-5 flex-shrink-0" />
+                          ) : (
+                            <input
+                              type="checkbox"
+                              className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
+                              checked={isSubCatSelected}
+                              onChange={() =>
+                                toggleSelection(subCatId, 'subcategory')
+                              }
+                              disabled={isEditingItem}
+                            />
+                          )}
+                          <button
+                            onClick={() =>
+                              toggleSubcategory(`${catIndex}-${subIndex}`)
+                            }
+                            className="w-4"
+                            disabled={isThisSubCatEditing}
+                          >
+                            <FontAwesomeIcon
+                              icon={
+                                isSubCatOpen ? faChevronDown : faChevronRight
+                              }
+                            />
+                          </button>
 
-                        {isThisSubCatEditing ? (
-                          <input ref={editInputRef} type="text" placeholder="z.B. Analyse-Methoden" value={tempEditValue.name} onChange={(e) => setTempEditValue({ name: e.target.value })} className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
-                        ) : (
-                          <span className="flex-1 font-bold uppercase">{subCat.name}</span>
-                        )}
+                          {isThisSubCatEditing ? (
+                            <input
+                              ref={editInputRef}
+                              type="text"
+                              placeholder="z.B. Analyse-Methoden"
+                              value={tempEditValue.name}
+                              onChange={(e) =>
+                                setTempEditValue({ name: e.target.value })
+                              }
+                              className="flex-1 p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
+                            />
+                          ) : (
+                            <span className="flex-1 font-bold uppercase">
+                              {subCat.name}
+                            </span>
+                          )}
 
-                        {isThisSubCatEditing ? (
-                          <div className="flex gap-4 w-16 justify-end">
-                            <button onClick={handleSave} className="text-interactive hover:text-interactive-hover" title="Speichern"><FontAwesomeIcon icon={faCheck} className="h-4 w-4" /></button>
-                            <button onClick={handleCancel} className="text-interactive hover:text-interactive-hover" title="Abbrechen"><FontAwesomeIcon icon={faTimes} className="h-4 w-4" /></button>
-                          </div>
-                        ) : (
-                          <div className="flex gap-4">
-                            <button onClick={() => handleAdd('skill', catIndex, subIndex)} className="flex items-center justify-center text-interactive bg-surface-rise hover:text-interactive-hover hover:border-interactive-hover border border-interactive" disabled={isEditingItem}><FontAwesomeIcon icon={faPlus} className="py-1.5 px-1" /></button>
-                            <button onClick={() => handleDelete('subcategory', catIndex, subIndex)} className="text-interactive-critical hover:text-interactive-critical-hover" disabled={isEditingItem}><FontAwesomeIcon icon={faTrash} /></button>
-                          </div>
-                        )}
-                      </div>
-
-                      {isSubCatOpen && skills.map((skill, skillIndex) => {
-                        const skillId = `skill-${catIndex}-${subIndex}-${skillIndex}`;
-                        const isSkillSelected = selectedItems.has(skillId);
-                        const isThisSkillEditing = editItem?.type === 'skill' && editItem.catIndex === catIndex && editItem.subIndex === subIndex && editItem.skillName === skill.name;
-
-                        return (
-                          <div key={skillId} className={`flex items-center gap-4 p-4 ${isThisSkillEditing ? 'bg-white shadow-md' : ''}`}>
-                            {isThisSkillEditing ? (
-                              <div className="w-5 h-5 flex-shrink-0" />
-                            ) : (
-                              <input type="checkbox" className="h-5 w-5 text-interactive border-interactive focus:ring-interactive flex-shrink-0" checked={isSkillSelected} onChange={() => toggleSelection(skillId, 'skill')} disabled={isEditingItem} />
-                            )}
-
-                            <div className="flex-1">
-                              {isThisSkillEditing ? (
-                                <>
-                                  <Label>Skills</Label>
-                                  <input ref={editInputRef} type="text" placeholder='z.B. Fehler-Analyse' value={tempEditValue.name} onChange={(e) => setTempEditValue(prev => ({ ...prev, name: e.target.value }))} className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" />
-                                </>
-                              ) : (
-                                <p>{skill.name}</p>
-                              )}
-                            </div>
-
-                            <div className="flex-1">
-                              {isThisSkillEditing ? (
-                                <>
-                                  <Label>Rating</Label>
-                                  <StarRatingInput
-                                    rating={tempEditValue.rating}
-                                    onChange={(newRating) => setTempEditValue(prev => ({ ...prev, rating: newRating }))}
-                                  />
-                                </>
-                              ) : (
-                                <StarRating rating={skill.rating} />
-                              )}
-                            </div>
-
+                          {isThisSubCatEditing ? (
                             <div className="flex gap-4 w-16 justify-end">
-                              {isThisSkillEditing ? (
-                                <>
-                                  <button onClick={handleSave} className="text-interactive hover:text-interactive-hover" title="Speichern"><FontAwesomeIcon icon={faCheck} className="h-4 w-4" /></button>
-                                  <button onClick={handleCancel} className="text-interactive hover:text-interactive-hover" title="Abbrechen"><FontAwesomeIcon icon={faTimes} className="h-4 w-4" /></button>
-                                </>
-                              ) : (
-                                <>
-                                  <button onClick={() => handleEditClick(skill, catIndex, subIndex)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten" disabled={isEditingItem}><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
-                                  <button onClick={() => handleDelete('skill', catIndex, subIndex, skill)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen" disabled={isEditingItem}><FontAwesomeIcon icon={faTrash} className="h-4 w-4" /></button>
-                                </>
-                              )}
+                              <button
+                                onClick={handleSave}
+                                className="text-interactive hover:text-interactive-hover"
+                                title="Speichern"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faCheck}
+                                  className="h-4 w-4"
+                                />
+                              </button>
+                              <button
+                                onClick={handleCancel}
+                                className="text-interactive hover:text-interactive-hover"
+                                title="Abbrechen"
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTimes}
+                                  className="h-4 w-4"
+                                />
+                              </button>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
+                          ) : (
+                            <div className="flex gap-4">
+                              <button
+                                onClick={() =>
+                                  handleAdd('skill', catIndex, subIndex)
+                                }
+                                className="flex items-center justify-center text-interactive bg-surface-rise hover:text-interactive-hover hover:border-interactive-hover border border-interactive"
+                                disabled={isEditingItem}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPlus}
+                                  className="py-1.5 px-1"
+                                />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleDelete(
+                                    'subcategory',
+                                    catIndex,
+                                    subIndex
+                                  )
+                                }
+                                className="text-interactive-critical hover:text-interactive-critical-hover"
+                                disabled={isEditingItem}
+                              >
+                                <FontAwesomeIcon icon={faTrash} />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        {isSubCatOpen &&
+                          skills.map((skill, skillIndex) => {
+                            const skillId = `skill-${catIndex}-${subIndex}-${skillIndex}`;
+                            const isSkillSelected = selectedItems.has(skillId);
+                            const isThisSkillEditing =
+                              editItem?.type === 'skill' &&
+                              editItem.catIndex === catIndex &&
+                              editItem.subIndex === subIndex &&
+                              editItem.skillName === skill.name;
+
+                            return (
+                              <div
+                                key={skillId}
+                                className={`flex items-center gap-4 p-4 ${isThisSkillEditing ? 'bg-white shadow-md' : ''}`}
+                              >
+                                {isThisSkillEditing ? (
+                                  <div className="w-5 h-5 flex-shrink-0" />
+                                ) : (
+                                  <input
+                                    type="checkbox"
+                                    className="h-5 w-5 text-interactive border-interactive focus:ring-interactive flex-shrink-0"
+                                    checked={isSkillSelected}
+                                    onChange={() =>
+                                      toggleSelection(skillId, 'skill')
+                                    }
+                                    disabled={isEditingItem}
+                                  />
+                                )}
+
+                                <div className="flex-1">
+                                  {isThisSkillEditing ? (
+                                    <>
+                                      <Label>Skills</Label>
+                                      <input
+                                        ref={editInputRef}
+                                        type="text"
+                                        placeholder="z.B. Fehler-Analyse"
+                                        value={tempEditValue.name}
+                                        onChange={(e) =>
+                                          setTempEditValue((prev) => ({
+                                            ...prev,
+                                            name: e.target.value,
+                                          }))
+                                        }
+                                        className="w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
+                                      />
+                                    </>
+                                  ) : (
+                                    <p>{skill.name}</p>
+                                  )}
+                                </div>
+
+                                <div className="flex-1">
+                                  {isThisSkillEditing ? (
+                                    <>
+                                      <Label>Rating</Label>
+                                      <StarRatingInput
+                                        rating={tempEditValue.rating}
+                                        onChange={(newRating) =>
+                                          setTempEditValue((prev) => ({
+                                            ...prev,
+                                            rating: newRating,
+                                          }))
+                                        }
+                                      />
+                                    </>
+                                  ) : (
+                                    <StarRating rating={skill.rating} />
+                                  )}
+                                </div>
+
+                                <div className="flex gap-4 w-16 justify-end">
+                                  {isThisSkillEditing ? (
+                                    <>
+                                      <button
+                                        onClick={handleSave}
+                                        className="text-interactive hover:text-interactive-hover"
+                                        title="Speichern"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faCheck}
+                                          className="h-4 w-4"
+                                        />
+                                      </button>
+                                      <button
+                                        onClick={handleCancel}
+                                        className="text-interactive hover:text-interactive-hover"
+                                        title="Abbrechen"
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTimes}
+                                          className="h-4 w-4"
+                                        />
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <button
+                                        onClick={() =>
+                                          handleEditClick(
+                                            skill,
+                                            catIndex,
+                                            subIndex
+                                          )
+                                        }
+                                        className="text-interactive hover:text-interactive-hover"
+                                        title="Bearbeiten"
+                                        disabled={isEditingItem}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faPencilAlt}
+                                          className="h-4 w-4"
+                                        />
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          handleDelete(
+                                            'skill',
+                                            catIndex,
+                                            subIndex,
+                                            skill
+                                          )
+                                        }
+                                        className="text-interactive-critical hover:text-interactive-critical-hover"
+                                        title="Löschen"
+                                        disabled={isEditingItem}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faTrash}
+                                          className="h-4 w-4"
+                                        />
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    );
+                  })}
               </div>
             );
           })
         ) : (
           <div className="text-center py-12 px-6 bg-surface-rise border border-border">
-            <h3 className="text-lg font-semibold text-primary">Keine Skills vorhanden</h3>
-            <p className="mt-2 text-sm text-secondary">Fügen Sie Ihre erste Kategorie hinzu, um zu beginnen.</p>
+            <h3 className="text-lg font-semibold text-primary">
+              Keine Skills vorhanden
+            </h3>
+            <p className="mt-2 text-sm text-secondary">
+              Fügen Sie Ihre erste Kategorie hinzu, um zu beginnen.
+            </p>
             <button
               onClick={() => handleAdd('category')}
               className="mt-4 flex items-center gap-2 mx-auto py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"

@@ -32,8 +32,8 @@ export default function SectionSidebar() {
                 href={`/content?section=${section.key}${isEditing ? '&edit=true' : ''}`}
                 className={clsx(
                   'block py-2.5 px-4 text-sm font-semibold transition-colors',
-                  isActive 
-                    ? 'bg-state-active text-interactive border-l-2 border-border-active"' 
+                  isActive
+                    ? 'bg-state-active text-interactive border-l-2 border-border-active"'
                     : 'text-primary hover:bg-state-hover'
                 )}
               >

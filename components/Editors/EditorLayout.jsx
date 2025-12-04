@@ -21,10 +21,10 @@ export default function EditorLayout({
   return (
     <div className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col mb-4 gap-4">
-        <h2 className="text-3xl font-bold text-primary font-zilla-slab">{title}</h2>
-        <div className="flex items-center gap-4">
-          {navLinks}
-        </div>
+        <h2 className="text-3xl font-bold text-primary font-zilla-slab">
+          {title}
+        </h2>
+        <div className="flex items-center gap-4">{navLinks}</div>
       </div>
 
       <div className="flex items-center gap-6 mt-8 py-2 px-4 border-b border-border">
@@ -41,10 +41,16 @@ export default function EditorLayout({
             <span className="text-sm font-bold text-primary">
               {selectedCount} AUSGEWÄHLT
             </span>
-            <button onClick={onDeselectAll} className="text-sm font-bold text-interactive hover:underline">
+            <button
+              onClick={onDeselectAll}
+              className="text-sm font-bold text-interactive hover:underline"
+            >
               AUSWAHL AUFHEBEN
             </button>
-            <button onClick={onDeleteSelected} className="text-sm font-bold text-interactive-critical hover:underline">
+            <button
+              onClick={onDeleteSelected}
+              className="text-sm font-bold text-interactive-critical hover:underline"
+            >
               AUSWAHL LÖSCHEN
             </button>
           </>
@@ -58,9 +64,7 @@ export default function EditorLayout({
       {children}
 
       {itemCount > 0 && (
-        <div className="flex justify-end mt-6">
-          {addNewButton}
-        </div>
+        <div className="flex justify-end mt-6">{addNewButton}</div>
       )}
     </div>
   );

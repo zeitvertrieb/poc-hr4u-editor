@@ -2,14 +2,22 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight, faPencilAlt, faTrash, faPlus, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faPencilAlt,
+  faTrash,
+  faPlus,
+  faCheck,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import NavLink from '../common/NavLink';
 import Label from '../common/Label';
 
 const newEntryDefaults = {
-  name: "",
-  years: "",
-  months: ""
+  name: '',
+  years: '',
+  months: '',
 };
 
 export default function IndustryExperienceEditor({ data, onChange }) {
@@ -38,9 +46,9 @@ export default function IndustryExperienceEditor({ data, onChange }) {
   };
 
   const handleItemSelect = (index) => {
-    setSelectedIndices(prev => {
+    setSelectedIndices((prev) => {
       if (prev.includes(index)) {
-        return prev.filter(i => i !== index);
+        return prev.filter((i) => i !== index);
       } else {
         return [...prev, index];
       }
@@ -64,14 +72,16 @@ export default function IndustryExperienceEditor({ data, onChange }) {
     onChange(newData);
     setEditIndex(0);
     setNewEntryIndex(0);
-    setSelectedIndices(prev => prev.map(i => i + 1));
+    setSelectedIndices((prev) => prev.map((i) => i + 1));
     if (listContainerRef.current) {
       listContainerRef.current.scrollTop = 0;
     }
   };
 
   const handleEntryChange = (index, field, value) => {
-    const updatedEntries = data.map((item, i) => (i === index ? { ...item, [field]: value } : item));
+    const updatedEntries = data.map((item, i) =>
+      i === index ? { ...item, [field]: value } : item
+    );
     onChange(updatedEntries);
   };
 
@@ -80,8 +90,8 @@ export default function IndustryExperienceEditor({ data, onChange }) {
     onChange(newArray);
 
     const newSelectedIndices = selectedIndices
-      .filter(i => i !== indexToDelete)
-      .map(i => (i > indexToDelete ? i - 1 : i));
+      .filter((i) => i !== indexToDelete)
+      .map((i) => (i > indexToDelete ? i - 1 : i));
     setSelectedIndices(newSelectedIndices);
 
     if (indexToDelete === editIndex) {
@@ -93,7 +103,7 @@ export default function IndustryExperienceEditor({ data, onChange }) {
   const handleSave = () => {
     if (editIndex === newEntryIndex && newEntryIndex !== null) {
       const entry = data[editIndex];
-      const isStillEmpty = Object.values(entry).every(val => val === "");
+      const isStillEmpty = Object.values(entry).every((val) => val === '');
       if (isStillEmpty) {
         handleDelete(editIndex);
         return;
@@ -117,28 +127,52 @@ export default function IndustryExperienceEditor({ data, onChange }) {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col mb-4 gap-4">
-        <h2 className="text-3xl font-bold text-primary font-zilla-slab">Branchenerfahrung</h2>
+        <h2 className="text-3xl font-bold text-primary font-zilla-slab">
+          Branchenerfahrung
+        </h2>
         <div className="flex items-center gap-4">
           <NavLink href="/content?section=core_qualifications&edit=true">
             <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
             Kernqualifikationen
           </NavLink>
           <NavLink href="/content?section=projects&edit=true">
-            Projekterfahrung<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
+            Projekterfahrung
+            <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
           </NavLink>
         </div>
       </div>
 
       <div className="flex items-center gap-6 mt-8 py-2 px-4 border-b border-border">
-        <input type="checkbox" className="h-5 w-5 text-interactive border-interactive focus:ring-interactive" ref={selectAllCheckboxRef} checked={selectedIndices.length === data.length && data.length > 0} onChange={handleSelectAll} disabled={isEditingItem} />
+        <input
+          type="checkbox"
+          className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
+          ref={selectAllCheckboxRef}
+          checked={selectedIndices.length === data.length && data.length > 0}
+          onChange={handleSelectAll}
+          disabled={isEditingItem}
+        />
         {isSelectionActive ? (
           <>
-            <span className="text-sm font-bold text-primary">{selectedIndices.length} AUSGEWÄHLT</span>
-            <button onClick={handleDeselectAll} className="text-sm font-bold text-interactive hover:underline">AUSWAHL AUFHEBEN</button>
-            <button onClick={handleDeleteSelected} className="text-sm font-bold text-interactive-critical hover:underline">AUSWAHL LÖSCHEN</button>
+            <span className="text-sm font-bold text-primary">
+              {selectedIndices.length} AUSGEWÄHLT
+            </span>
+            <button
+              onClick={handleDeselectAll}
+              className="text-sm font-bold text-interactive hover:underline"
+            >
+              AUSWAHL AUFHEBEN
+            </button>
+            <button
+              onClick={handleDeleteSelected}
+              className="text-sm font-bold text-interactive-critical hover:underline"
+            >
+              AUSWAHL LÖSCHEN
+            </button>
           </>
         ) : (
-          <span className="text-sm text-primary font-bold uppercase">{data.length} {data.length === 1 ? 'ERFAHRUNG' : 'ERFAHRUNGEN'}</span>
+          <span className="text-sm text-primary font-bold uppercase">
+            {data.length} {data.length === 1 ? 'ERFAHRUNG' : 'ERFAHRUNGEN'}
+          </span>
         )}
       </div>
 
@@ -147,32 +181,111 @@ export default function IndustryExperienceEditor({ data, onChange }) {
           data.map((entry, index) => {
             const isThisRowEditing = editIndex === index;
             return (
-              <div key={index} className={`flex items-center gap-4 p-4 bg-surface-rise border ${isThisRowEditing ? 'border-primary shadow-md' : 'border-border'}`}>
-                {isThisRowEditing ? <div className="w-5 h-5 flex-shrink-0" /> : <input type="checkbox" className="h-5 w-5 text-interactive border-interactive focus:ring-interactive" checked={selectedIndices.includes(index)} onChange={() => handleItemSelect(index)} disabled={isEditingItem} />}
+              <div
+                key={index}
+                className={`flex items-center gap-4 p-4 bg-surface-rise border ${isThisRowEditing ? 'border-primary shadow-md' : 'border-border'}`}
+              >
+                {isThisRowEditing ? (
+                  <div className="w-5 h-5 flex-shrink-0" />
+                ) : (
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5 text-interactive border-interactive focus:ring-interactive"
+                    checked={selectedIndices.includes(index)}
+                    onChange={() => handleItemSelect(index)}
+                    disabled={isEditingItem}
+                  />
+                )}
                 <div className="flex-1 flex gap-6">
-                  <div className='flex-1'>
+                  <div className="flex-1">
                     <Label htmlFor={`name-${index}`}>Name</Label>
-                    {isThisRowEditing ? <input id={`name-${index}`} type="text" value={entry.name} onChange={(e) => handleEntryChange(index, 'name', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none" placeholder="z.B. Einzelhandel" /> : <p className="mt-1">{entry.name}</p>}
+                    {isThisRowEditing ? (
+                      <input
+                        id={`name-${index}`}
+                        type="text"
+                        value={entry.name}
+                        onChange={(e) =>
+                          handleEntryChange(index, 'name', e.target.value)
+                        }
+                        className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none"
+                        placeholder="z.B. Einzelhandel"
+                      />
+                    ) : (
+                      <p className="mt-1">{entry.name}</p>
+                    )}
                   </div>
-                  <div className='flex-1 text-right'>
+                  <div className="flex-1 text-right">
                     <Label htmlFor={`years-${index}`}>Jahre</Label>
-                    {isThisRowEditing ? <input id={`years-${index}`} type="text" value={entry.years} onChange={(e) => handleEntryChange(index, 'years', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 4" /> : <p className="mt-1 text-right">{entry.years}</p>}
+                    {isThisRowEditing ? (
+                      <input
+                        id={`years-${index}`}
+                        type="text"
+                        value={entry.years}
+                        onChange={(e) =>
+                          handleEntryChange(index, 'years', e.target.value)
+                        }
+                        className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right"
+                        placeholder="z.B. 4"
+                      />
+                    ) : (
+                      <p className="mt-1 text-right">{entry.years}</p>
+                    )}
                   </div>
-                  <div className='flex-1 text-right'>
+                  <div className="flex-1 text-right">
                     <Label htmlFor={`months-${index}`}>Monate</Label>
-                    {isThisRowEditing ? <input id={`months-${index}`} type="text" value={entry.months} onChange={(e) => handleEntryChange(index, 'months', e.target.value)} className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right" placeholder="z.B. 10" /> : <p className="mt-1 text-right">{entry.months}</p>}
+                    {isThisRowEditing ? (
+                      <input
+                        id={`months-${index}`}
+                        type="text"
+                        value={entry.months}
+                        onChange={(e) =>
+                          handleEntryChange(index, 'months', e.target.value)
+                        }
+                        className="mt-1 w-full p-1 bg-surface-rise border-b border-border focus:border-interactive-active focus:outline-none text-right"
+                        placeholder="z.B. 10"
+                      />
+                    ) : (
+                      <p className="mt-1 text-right">{entry.months}</p>
+                    )}
                   </div>
                 </div>
                 <div className="flex gap-4 w-16 justify-end">
                   {isThisRowEditing ? (
                     <>
-                      <button onClick={handleSave} className="text-interactive hover:text-interactive-hover" title="Speichern"><FontAwesomeIcon icon={faCheck} className="h-4 w-4" /></button>
-                      <button onClick={handleCancel} className="text-interactive hover:text-interactive-hover" title="Abbrechen"><FontAwesomeIcon icon={faTimes} className="h-4 w-4" /></button>
+                      <button
+                        onClick={handleSave}
+                        className="text-interactive hover:text-interactive-hover"
+                        title="Speichern"
+                      >
+                        <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="text-interactive hover:text-interactive-hover"
+                        title="Abbrechen"
+                      >
+                        <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+                      </button>
                     </>
                   ) : (
                     <>
-                      <button onClick={() => setEditIndex(index)} className="text-interactive hover:text-interactive-hover" title="Bearbeiten"><FontAwesomeIcon icon={faPencilAlt} className="h-4 w-4" /></button>
-                      <button onClick={() => handleDelete(index)} className="text-interactive-critical hover:text-interactive-critical-hover" title="Löschen"><FontAwesomeIcon icon={faTrash} className="h-4 w-4" /></button>
+                      <button
+                        onClick={() => setEditIndex(index)}
+                        className="text-interactive hover:text-interactive-hover"
+                        title="Bearbeiten"
+                      >
+                        <FontAwesomeIcon
+                          icon={faPencilAlt}
+                          className="h-4 w-4"
+                        />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(index)}
+                        className="text-interactive-critical hover:text-interactive-critical-hover"
+                        title="Löschen"
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                      </button>
                     </>
                   )}
                 </div>
@@ -181,8 +294,12 @@ export default function IndustryExperienceEditor({ data, onChange }) {
           })
         ) : (
           <div className="text-center py-12 px-6 bg-surface-rise border border-border">
-            <h3 className="text-lg font-semibold text-primary">Keine Branchenerfahrung vorhanden</h3>
-            <p className="mt-2 text-sm text-secondary">Fügen Sie Ihre erste Erfahrung hinzu, um zu beginnen.</p>
+            <h3 className="text-lg font-semibold text-primary">
+              Keine Branchenerfahrung vorhanden
+            </h3>
+            <p className="mt-2 text-sm text-secondary">
+              Fügen Sie Ihre erste Erfahrung hinzu, um zu beginnen.
+            </p>
             <button
               onClick={handleAddNew}
               className="mt-4 flex items-center gap-2 mx-auto py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
@@ -196,13 +313,15 @@ export default function IndustryExperienceEditor({ data, onChange }) {
 
       {data.length > 0 && (
         <div className="flex justify-end mt-6">
-          <button onClick={handleAddNew} className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover">
+          <button
+            onClick={handleAddNew}
+            className="flex items-center gap-2 py-2 px-4 bg-surface-rise border-2 border-interactive text-interactive font-bold hover:border-interactive-hover hover:text-interactive-hover"
+          >
             <FontAwesomeIcon icon={faPlus} className="h-3 w-3" />
             ERFAHRUNG HINZUFÜGEN
           </button>
         </div>
-      )
-      }
+      )}
     </div>
   );
 }

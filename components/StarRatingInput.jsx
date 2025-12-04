@@ -20,7 +20,9 @@ export default function StarRatingInput({ rating, onChange }) {
           onMouseLeave={() => setHoverRating(0)}
         >
           <FontAwesomeIcon
-            icon={value <= (hoverRating || rating) ? faStarSolid : faStarRegular}
+            icon={
+              value <= (hoverRating || rating) ? faStarSolid : faStarRegular
+            }
             className="h-4 w-4"
           />
         </button>

@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronRight,
   faChevronDown,
-  faChevronLeft
+  faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import StarRating from '../Preview/StarRating';
 
-const ratingMap = { "five": 5, "four": 4, "three": 3, "two": 2, "one": 1 };
+const ratingMap = { five: 5, four: 4, three: 3, two: 2, one: 1 };
 
 function transformSkills(subCategory) {
   const skills = [];
@@ -30,16 +30,23 @@ function transformSkills(subCategory) {
 
 function NavLink({ href, children }) {
   return (
-    <Link href={href} className="text-sm font-medium text-interactive hover:text-interactive-hover">
+    <Link
+      href={href}
+      className="text-sm font-medium text-interactive hover:text-interactive-hover"
+    >
       {children}
     </Link>
   );
 }
 
 export default function SkillsView({ data }) {
-  const [openCategories, setOpenCategories] = useState(new Set(data.map((_, i) => i)));
+  const [openCategories, setOpenCategories] = useState(
+    new Set(data.map((_, i) => i))
+  );
   const [openSubcategories, setOpenSubcategories] = useState(
-    new Set(data.flatMap((cat, ci) => cat.subcategories.map((_, si) => `${ci}-${si}`)))
+    new Set(
+      data.flatMap((cat, ci) => cat.subcategories.map((_, si) => `${ci}-${si}`))
+    )
   );
   const [isAllOpen, setIsAllOpen] = useState(true);
 
@@ -49,13 +56,19 @@ export default function SkillsView({ data }) {
       setOpenSubcategories(new Set());
     } else {
       setOpenCategories(new Set(data.map((_, i) => i)));
-      setOpenSubcategories(new Set(data.flatMap((cat, ci) => cat.subcategories.map((_, si) => `${ci}-${si}`))));
+      setOpenSubcategories(
+        new Set(
+          data.flatMap((cat, ci) =>
+            cat.subcategories.map((_, si) => `${ci}-${si}`)
+          )
+        )
+      );
     }
     setIsAllOpen(!isAllOpen);
   };
 
   const toggleCategory = (catIndex) => {
-    setOpenCategories(prev => {
+    setOpenCategories((prev) => {
       const next = new Set(prev);
       next.has(catIndex) ? next.delete(catIndex) : next.add(catIndex);
       return next;
@@ -63,7 +76,7 @@ export default function SkillsView({ data }) {
   };
 
   const toggleSubcategory = (id) => {
-    setOpenSubcategories(prev => {
+    setOpenSubcategories((prev) => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
@@ -73,13 +86,17 @@ export default function SkillsView({ data }) {
   return (
     <div className="w-full max-w-6xl mx-auto px-2">
       <div className="flex flex-col mb-4 gap-4">
-        <h2 className="text-3xl font-bold text-primary font-zilla-slab">Skills</h2>
+        <h2 className="text-3xl font-bold text-primary font-zilla-slab">
+          Skills
+        </h2>
         <div className="flex items-center gap-4">
           <NavLink href="/content?section=projects">
-            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />Projekterfahrung
+            <FontAwesomeIcon icon={faChevronLeft} className="h-3 w-3 mr-2" />
+            Projekterfahrung
           </NavLink>
           <NavLink href="/content?section=hobbies">
-            Hobbies<FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
+            Hobbies
+            <FontAwesomeIcon icon={faChevronRight} className="h-3 w-3 ml-2" />
           </NavLink>
         </div>
       </div>
@@ -99,36 +116,62 @@ export default function SkillsView({ data }) {
             const isCatOpen = openCategories.has(catIndex);
 
             return (
-              <div key={category.category} className="border-b border-border last:border-b-0">
+              <div
+                key={category.category}
+                className="border-b border-border last:border-b-0"
+              >
                 <div className="flex items-center gap-4 p-4 bg-[#CDBEDF]">
                   <div className="w-5 h-5 flex-shrink-0" />
-                  <button onClick={() => toggleCategory(catIndex)} className="w-4">
-                    <FontAwesomeIcon icon={isCatOpen ? faChevronDown : faChevronRight} />
+                  <button
+                    onClick={() => toggleCategory(catIndex)}
+                    className="w-4"
+                  >
+                    <FontAwesomeIcon
+                      icon={isCatOpen ? faChevronDown : faChevronRight}
+                    />
                   </button>
-                  <span className="flex-1 font-bold uppercase">{category.category}</span>
+                  <span className="flex-1 font-bold uppercase">
+                    {category.category}
+                  </span>
                 </div>
 
-                {isCatOpen && (
-                  category.subcategories && category.subcategories.length > 0 ? (
+                {isCatOpen &&
+                  (category.subcategories &&
+                  category.subcategories.length > 0 ? (
                     category.subcategories.map((subCat, subIndex) => {
                       const subCatId = `${catIndex}-${subIndex}`;
                       const isSubCatOpen = openSubcategories.has(subCatId);
                       const skills = transformSkills(subCat);
 
                       return (
-                        <div key={subCat.name} className="border-t border-border">
+                        <div
+                          key={subCat.name}
+                          className="border-t border-border"
+                        >
                           <div className="flex items-center gap-4 p-4 bg-[#E2E0EF]">
                             <div className="w-5 h-5 flex-shrink-0" />
-                            <button onClick={() => toggleSubcategory(subCatId)} className="w-4">
-                              <FontAwesomeIcon icon={isSubCatOpen ? faChevronDown : faChevronRight} />
+                            <button
+                              onClick={() => toggleSubcategory(subCatId)}
+                              className="w-4"
+                            >
+                              <FontAwesomeIcon
+                                icon={
+                                  isSubCatOpen ? faChevronDown : faChevronRight
+                                }
+                              />
                             </button>
-                            <span className="flex-1 font-bold uppercase">{subCat.name}</span>
+                            <span className="flex-1 font-bold uppercase">
+                              {subCat.name}
+                            </span>
                           </div>
 
-                          {isSubCatOpen && (
-                            skills.length > 0 ? (
+                          {isSubCatOpen &&
+                            (skills.length > 0 ? (
                               skills.map((skill) => (
-                                <div key={skill.name} className="flex items-center gap-4 p-4">
+                                <div
+                                  key={skill.name}
+                                  className="flex items-center gap-4 p-4"
+                                >
                                   <div className="w-5 h-5 flex-shrink-0" />
                                   <div className="w-4" />
 
@@ -140,23 +183,29 @@ export default function SkillsView({ data }) {
                                 </div>
                               ))
                             ) : (
-                              <div className="p-4 text-sm text-secondary text-center">Keine Skills in dieser Unterkategorie vorhanden.</div>
-                            )
-                          )}
+                              <div className="p-4 text-sm text-secondary text-center">
+                                Keine Skills in dieser Unterkategorie vorhanden.
+                              </div>
+                            ))}
                         </div>
                       );
                     })
                   ) : (
-                    <div className="p-4 text-sm text-secondary text-center">Keine Unterkategorien in dieser Kategorie vorhanden.</div>
-                  )
-                )}
+                    <div className="p-4 text-sm text-secondary text-center">
+                      Keine Unterkategorien in dieser Kategorie vorhanden.
+                    </div>
+                  ))}
               </div>
             );
           })
         ) : (
           <div className="text-center py-12 px-6 bg-surface-rise border border-border">
-            <h3 className="text-lg font-semibold text-primary">Keine Skills vorhanden</h3>
-            <p className="mt-2 text-sm text-secondary">In dieser Kategorie wurden noch keine Einträge hinzugefügt.</p>
+            <h3 className="text-lg font-semibold text-primary">
+              Keine Skills vorhanden
+            </h3>
+            <p className="mt-2 text-sm text-secondary">
+              In dieser Kategorie wurden noch keine Einträge hinzugefügt.
+            </p>
           </div>
         )}
       </div>

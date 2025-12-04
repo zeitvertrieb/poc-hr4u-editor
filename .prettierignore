@@ -1,0 +1,11 @@
+# Dependencies
+/node_modules
+
+# Build output
+/dist
+/.next/
+/out/
+
+# Other
+/coverage
+.DS_Store
